@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIND — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────── */
+:root {
+  --color-bg:            #EAEAF2;
+  --color-surface:       #F2F2F8;
+  --color-surface-2:     #FFFFFF;
+  --color-ink:           #0D0D0F;
+  --color-ink-muted:     #5A5A66;
+  --color-rule:          rgba(13,13,15,0.1);
+  --color-blob:          #A89CE0;
+  --color-blob-light:    #C8C0F0;
+  --color-blob-dark:     #7B6FBB;
+  --color-blob-cast:     rgba(100, 88, 160, 0.18);
+
+  --type-poster:  clamp(64px, 16vw, 160px);
+  --type-display: clamp(40px, 8vw, 88px);
+  --type-heading: 28px;
+  --type-label:   11px;
+  --type-body:    15px;
+  --type-caption: 12px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+  --space-7: 104px;
+  --space-8: 160px;
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.4, 0, 0.6, 1);
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────── */
+.ds-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+section {
+  padding: var(--space-7) 0;
+  border-top: 1px solid var(--color-rule);
+}
+
+section:first-child { border-top: none; }
+
+/* ─────────────────────────────────────────
+   SECTION LABELS
+───────────────────────────────────────── */
+.section-label {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-rule);
+}
+.section-num {
+  color: var(--color-blob);
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: var(--space-8) 0;
+}
+
+.hero-corner {
+  position: absolute;
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.hero-corner.tl { top: var(--space-5); left: var(--space-5); }
+.hero-corner.tr { top: var(--space-5); right: var(--space-5); text-align: right; }
+.hero-corner.bl { bottom: var(--space-5); left: var(--space-5); }
+.hero-corner.br { bottom: var(--space-5); right: var(--space-5); text-align: right; }
+.hero-corner span { display: block; }
+
+.hero-stack {
+  position: relative;
+  width: 100%;
+}
+
+.hero-words {
+  font-family: var(--font-display);
+  font-size: var(--type-poster);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.hero-blob-layer {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   SVG BLOB LETTERS
+───────────────────────────────────────── */
+.blob-letter {
+  animation: float 4s ease-in-out infinite;
+  transform-origin: center;
+}
+.blob-letter:nth-child(1) { animation-delay: 0s; }
+.blob-letter:nth-child(2) { animation-delay: -1.3s; }
+.blob-letter:nth-child(3) { animation-delay: -2.6s; }
+.blob-letter:nth-child(4) { animation-delay: -0.8s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(1.5deg); }
+  66%       { transform: translateY(4px) rotate(-1deg); }
+}
+
+/* ─────────────────────────────────────────
+   COLORS SECTION
+───────────────────────────────────────── */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+.color-swatch {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-surface-2);
+  box-shadow: 0 2px 12px rgba(100,88,160,0.06);
+}
+.swatch-color {
+  height: 80px;
+  width: 100%;
+}
+.swatch-info {
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+.swatch-name {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--color-ink);
+  display: block;
+  margin-bottom: 2px;
+}
+.swatch-token {
+  font-size: 10px;
+  color: var(--color-ink-muted);
+  font-family: 'Courier New', monospace;
+}
+.swatch-hex {
+  font-size: 10px;
+  color: var(--color-blob-dark);
+  font-family: 'Courier New', monospace;
+  margin-top: 2px;
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY SECTION
+───────────────────────────────────────── */
+.type-stack > * + * {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-rule);
+}
+
+.type-specimen {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: var(--space-5);
+  align-items: end;
+}
+
+.type-meta {
+  font-size: var(--type-caption);
+  color: var(--color-ink-muted);
+  line-height: 1.8;
+  text-align: right;
+}
+.type-meta b {
+  color: var(--color-ink);
+  font-weight: 500;
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.t-poster {
+  font-family: var(--font-display);
+  font-size: var(--type-poster);
+  line-height: 0.88;
+  color: var(--color-ink);
+  text-transform: uppercase;
+}
+.t-display {
+  font-family: var(--font-display);
+  font-size: var(--type-display);
+  line-height: 0.92;
+  color: var(--color-ink);
+  text-transform: uppercase;
+}
+.t-heading {
+  font-family: var(--font-body);
+  font-size: var(--type-heading);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+.t-label-demo {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+.t-body-demo {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--color-ink);
+  max-width: 540px;
+}
+.t-caption-demo {
+  font-family: var(--font-body);
+  font-size: var(--type-caption);
+  color: var(--color-ink-muted);
+}
+
+/* ─────────────────────────────────────────
+   SPACING SECTION
+───────────────────────────────────────── */
+.spacing-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.spacing-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.spacing-bar-wrap {
+  flex: 1;
+  height: 12px;
+  background: var(--color-rule);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.spacing-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--color-blob-dark), var(--color-blob-light));
+  border-radius: 999px;
+}
+.spacing-token {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-blob-dark);
+  width: 90px;
+  flex-shrink: 0;
+}
+.spacing-val {
+  font-size: 11px;
+  color: var(--color-ink-muted);
+  width: 36px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────
+   BLOB ANATOMY
+───────────────────────────────────────── */
+.blob-anatomy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.blob-demo-wrap {
+  display: flex;
+  gap: var(--space-5);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-surface-2);
+  border-radius: 20px;
+}
+
+.blob-demo {
+  animation: float 4s ease-in-out infinite;
+  cursor: pointer;
+  transition: filter 0.3s var(--ease-spring);
+}
+.blob-demo:hover {
+  filter: brightness(1.08) drop-shadow(0 16px 40px rgba(100,88,160,0.35));
+}
+.blob-demo:nth-child(2) { animation-delay: -1.5s; }
+.blob-demo:nth-child(3) { animation-delay: -2.8s; }
+
+.blob-props {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.blob-prop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.blob-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.blob-prop-info { flex: 1; }
+.blob-prop-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.blob-prop-value {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-ink-muted);
+}
+
+/* ─────────────────────────────────────────
+   COMPONENTS
+───────────────────────────────────────── */
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.comp-block {
+  background: var(--color-surface-2);
+  border-radius: 16px;
+  padding: var(--space-5);
+}
+
+.comp-block-label {
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-4);
+}
+
+/* Tag / chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1.5px solid var(--color-blob);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: default;
+  transition: background 0.2s, color 0.2s;
+}
+.chip:hover {
+  background: var(--color-blob);
+  color: #fff;
+}
+.chip.filled {
+  background: var(--color-blob);
+  color: #fff;
+  border-color: transparent;
+}
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  padding: 10px 28px 8px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+}
+.btn-primary {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+.btn-primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(13,13,15,0.25);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-ink);
+}
+.btn-outline:hover {
+  transform: scale(1.04);
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+.btn-blob {
+  background: var(--color-blob);
+  color: #fff;
+}
+.btn-blob:hover {
+  transform: scale(1.05) rotate(1deg);
+  box-shadow: 0 8px 28px var(--color-blob-cast);
+}
+.btn-group { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+/* Card */
+.ds-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: var(--space-5);
+  box-shadow: 0 2px 16px rgba(100,88,160,0.07);
+  transition: box-shadow 0.3s, transform 0.3s var(--ease-spring);
+}
+.ds-card:hover {
+  box-shadow: 0 8px 32px rgba(100,88,160,0.14);
+  transform: translateY(-2px);
+}
+.ds-card-eyebrow {
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-blob);
+  margin-bottom: var(--space-2);
+}
+.ds-card-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+.ds-card-body {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--color-ink-muted);
+  line-height: 1.6;
+}
+
+/* Input */
+.ds-input-wrap { position: relative; }
+.ds-input {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-rule);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ds-input::placeholder { color: var(--color-ink-muted); }
+.ds-input:focus {
+  border-color: var(--color-blob);
+  box-shadow: 0 0 0 3px rgba(168,156,224,0.2);
+}
+.ds-input-label {
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+/* ─────────────────────────────────────────
+   POSTER DEMO
+───────────────────────────────────────── */
+.poster-demo {
+  position: relative;
+  background: var(--color-bg);
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  max-width: 360px;
+  box-shadow: 0 16px 64px rgba(100,88,160,0.18);
+}
+
+.poster-demo-corners .pc {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  z-index: 10;
+  color: var(--color-ink);
+}
+.pc.tl { top: 16px; left: 16px; }
+.pc.tr { top: 16px; right: 16px; }
+.pc.bl { bottom: 16px; left: 16px; }
+.pc.br { bottom: 16px; right: 16px; }
+
+.poster-demo-type {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 12vw, 64px);
+  line-height: 0.88;
+  color: var(--color-ink);
+  text-transform: uppercase;
+  padding: 0 8px;
+  z-index: 1;
+  user-select: none;
+}
+
+.poster-demo-blobs {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   MOTION TOKENS
+───────────────────────────────────────── */
+.motion-demos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+.motion-block {
+  background: var(--color-surface-2);
+  border-radius: 16px;
+  padding: var(--space-5);
+  text-align: center;
+}
+.motion-orb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 35%, var(--color-blob-light), var(--color-blob) 55%, var(--color-blob-dark));
+  margin: 0 auto var(--space-3);
+}
+.motion-orb.spring  { animation: demo-spring 3s var(--ease-spring) infinite; }
+.motion-orb.breathe { animation: demo-breathe 3s ease-in-out infinite; }
+.motion-orb.rotate  { animation: demo-rotate 4s linear infinite; }
+@keyframes demo-spring  {
+  0%,100% { transform: scale(1) translateY(0); }
+  50%      { transform: scale(0.8) translateY(12px); }
+}
+@keyframes demo-breathe {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+@keyframes demo-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.motion-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  display: block;
+  margin-bottom: 2px;
+}
+.motion-ease {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-ink-muted);
+}
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+.ds-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(234,234,242,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--color-ink);
+  letter-spacing: 0.05em;
+}
+.nav-logo span { color: var(--color-blob); }
+
+.nav-links {
+  display: flex;
+  gap: var(--space-5);
+  list-style: none;
+}
+.nav-links a {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--color-ink); }
+
+/* ─────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+.flex-row { display: flex; align-items: center; gap: var(--space-3); }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <div class="nav-logo">MIND<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#colors">Colors</a></li>
+    <li><a href="#type">Type</a></li>
+    <li><a href="#spacing">Spacing</a></li>
+    <li><a href="#blob">Blob</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#motion">Motion</a></li>
+  </ul>
+</nav>
+
+
+<!-- ───────── HERO ───────── -->
+<section class="hero" style="padding-top:120px;">
+  <div class="hero-corner tl"><span>MIND</span></div>
+  <div class="hero-corner tr"><span>MIND</span></div>
+  <div class="hero-corner bl">
+    <span>OUT</span>
+  </div>
+  <div class="hero-corner br">
+    <span>OUT</span>
+  </div>
+
+  <div class="ds-wrap" style="width:100%;">
+    <div class="hero-stack">
+      <div class="hero-words" aria-label="Mind x5">
+        MIND<br>MIND<br>MIND<br>MIND<br>MIND
+      </div>
+
+      <!-- Floating blob letters SVG overlay -->
+      <div class="hero-blob-layer">
+        <svg viewBox="0 0 900 520" width="100%" preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;">
+          <defs>
+            <radialGradient id="blobGrad" cx="35%" cy="30%" r="65%">
+              <stop offset="0%"   stop-color="#D0C8F4"/>
+              <stop offset="45%"  stop-color="#A89CE0"/>
+              <stop offset="100%" stop-color="#7060B8"/>
+            </radialGradient>
+            <filter id="blobShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(100,88,160,0.22)"/>
+            </filter>
+          </defs>
+
+          <!-- M blob -->
+          <g class="blob-letter" filter="url(#blobShadow)" transform="translate(40,20) rotate(-4,180,200)">
+            <path d="M60,260 C40,260 30,240 30,220 L30,80 C30,60 45,50 60,50 C70,50 80,56 88,68 L140,160 L192,68 C200,56 210,50 220,50 C235,50 250,60 250,80 L250,220 C250,240 240,260 220,260 C200,260 190,244 190,224 L190,140 L155,200 C148,210 145,218 140,218 C135,218 132,210 125,200 L90,140 L90,224 C90,244 80,260 60,260 Z"
+              fill="url(#blobGrad)" stroke="none"/>
+          </g>
+
+          <!-- I blob -->
+          <g class="blob-letter" filter="url(#blobShadow)" transform="translate(260,40) rotate(3,60,180)">
+            <rect x="20" y="20" width="80" height="320" rx="40" ry="40"
+              fill="url(#blobGrad)"/>
+          </g>
+
+          <!-- N blob -->
+          <g class="blob-letter" filter="url(#blobShadow)" transform="translate(400,10) rotate(-2,180,200)">
+            <path d="M40,260 C22,260 12,244 12,224 L12,80 C12,60 24,48 44,48 C58,48 70,56 80,72 L190,228 L190,80 C190,60 202,48 220,48 C238,48 250,60 250,80 L250,224 C250,244 238,258 220,260 C206,260 194,252 182,236 L72,80 L72,224 C72,244 60,260 40,260 Z"
+              fill="url(#blobGrad)"/>
+          </g>
+
+          <!-- D blob -->
+          <g class="blob-letter" filter="url(#blobShadow)" transform="translate(640,30) rotate(2,160,200)">
+            <path d="M40,260 C22,260 12,246 12,224 L12,80 C12,58 22,48 44,48 L130,48 C200,48 250,110 250,180 C250,236 210,260 160,260 Z M75,220 L130,220 C175,220 200,206 200,180 C200,150 180,92 130,92 L75,92 Z"
+              fill="url(#blobGrad)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--space-6);">
+      <p class="t-label-demo">Out of Mind · Design System v1.0</p>
+      <p style="font-size:14px;color:var(--color-ink-muted);margin-top:var(--space-2);max-width:420px;">
+        A design language built on tension — heavy flat type grounded against inflated, glossy 3D forms. One accent. No gradients on backgrounds. Every decision intentional.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───────── COLORS ───────── -->
+<section id="colors">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">01</span> Colors</p>
+
+    <div class="color-grid">
+      <!-- Background -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#EAEAF2;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Background</span>
+          <span class="swatch-token">--color-bg</span>
+          <span class="swatch-hex">#EAEAF2</span>
+        </div>
+      </div>
+      <!-- Surface -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#F2F2F8;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Surface</span>
+          <span class="swatch-token">--color-surface</span>
+          <span class="swatch-hex">#F2F2F8</span>
+        </div>
+      </div>
+      <!-- Ink -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#0D0D0F;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Ink</span>
+          <span class="swatch-token">--color-ink</span>
+          <span class="swatch-hex">#0D0D0F</span>
+        </div>
+      </div>
+      <!-- Ink Muted -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#5A5A66;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Ink Muted</span>
+          <span class="swatch-token">--color-ink-muted</span>
+          <span class="swatch-hex">#5A5A66</span>
+        </div>
+      </div>
+      <!-- Blob -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#A89CE0;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Blob</span>
+          <span class="swatch-token">--color-blob</span>
+          <span class="swatch-hex">#A89CE0</span>
+        </div>
+      </div>
+      <!-- Blob Light -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#C8C0F0;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Blob Highlight</span>
+          <span class="swatch-token">--color-blob-light</span>
+          <span class="swatch-hex">#C8C0F0</span>
+        </div>
+      </div>
+      <!-- Blob Dark -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#7B6FBB;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Blob Shadow</span>
+          <span class="swatch-token">--color-blob-dark</span>
+          <span class="swatch-hex">#7B6FBB</span>
+        </div>
+      </div>
+      <!-- Cast shadow -->
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:rgba(100,88,160,0.18);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Cast Shadow</span>
+          <span class="swatch-token">--color-blob-cast</span>
+          <span class="swatch-hex">rgba(100,88,160,.18)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───────── TYPOGRAPHY ───────── -->
+<section id="type">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">02</span> Typography</p>
+
+    <div class="type-stack">
+      <div class="type-specimen">
+        <div class="t-poster">MIND</div>
+        <div class="type-meta">
+          <b>Poster</b>
+          Bebas Neue · 400<br>
+          clamp(64px→160px)<br>
+          Line height 0.88<br>
+          Uppercase
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="t-display">OUT OF MIND</div>
+        <div class="type-meta">
+          <b>Display</b>
+          Bebas Neue · 400<br>
+          clamp(40px→88px)<br>
+          Line height 0.92
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="t-heading">A design language built on tension</div>
+        <div class="type-meta">
+          <b>Heading</b>
+          DM Sans · 300<br>
+          28px · LH 1.1
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="t-label-demo">Section Label · Corner Anchor</div>
+        <div class="type-meta">
+          <b>Label</b>
+          DM Sans · 500<br>
+          11px · LS 0.2em<br>
+          Uppercase
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="t-body-demo">Neither element dominates. The flat grounds; the volumetric floats. The result is designed tension — between two states, two materials, two worlds coexisting on the same plane.</div>
+        <div class="type-meta">
+          <b>Body</b>
+          DM Sans · 300<br>
+          15px · LH 1.65
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="t-caption-demo">Design System v1.0 · Extracted from Out of Mind</div>
+        <div class="type-meta">
+          <b>Caption</b>
+          DM Sans · 300<br>
+          12px · LH 1.5
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───────── SPACING ───────── -->
+<section id="spacing">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">03</span> Spacing</p>
+
+    <div class="spacing-grid">
+      <div class="spacing-row">
+        <span class="spacing-token">--space-1</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:2.5%;"></div></div>
+        <span class="spacing-val">4px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-2</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:5%;"></div></div>
+        <span class="spacing-val">8px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-3</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:10%;"></div></div>
+        <span class="spacing-val">16px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-4</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:15%;"></div></div>
+        <span class="spacing-val">24px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-5</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:25%;"></div></div>
+        <span class="spacing-val">40px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-6</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:40%;"></div></div>
+        <span class="spacing-val">64px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-7</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:65%;"></div></div>
+        <span class="spacing-val">104px</span>
+      </div>
+      <div class="spacing-row">
+        <span class="spacing-token">--space-8</span>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:100%;"></div></div>
+        <span class="spacing-val">160px</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───────── BLOB ANATOMY ───────── -->
+<section id="blob">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">04</span> Blob System</p>
+
+    <div class="blob-anatomy">
+
+      <div class="blob-demo-wrap">
+        <!-- Small circle blob -->
+        <svg class="blob-demo" width="80" height="80" viewBox="0 0 80 80">
+          <defs>
+            <radialGradient id="g1" cx="35%" cy="30%" r="65%">
+              <stop offset="0%" stop-color="#D0C8F4"/>
+              <stop offset="45%" stop-color="#A89CE0"/>
+              <stop offset="100%" stop-color="#6A60A8"/>
+            </radialGradient>
+          </defs>
+          <circle cx="40" cy="40" r="36" fill="url(#g1)" filter="drop-shadow(0 6px 16px rgba(100,88,160,0.25))"/>
+          <circle cx="28" cy="26" r="6" fill="white" opacity="0.6"/>
+        </svg>
+
+        <!-- Elongated pill blob -->
+        <svg class="blob-demo" width="110" height="60" viewBox="0 0 110 60">
+          <defs>
+            <radialGradient id="g2" cx="30%" cy="28%" r="70%">
+              <stop offset="0%" stop-color="#D8D0F8"/>
+              <stop offset="50%" stop-color="#A89CE0"/>
+              <stop offset="100%" stop-color="#6A60A8"/>
+            </radialGradient>
+          </defs>
+          <rect x="4" y="4" width="102" height="52" rx="26" fill="url(#g2)" filter="drop-shadow(0 5px 14px rgba(100,88,160,0.22))"/>
+          <circle cx="30" cy="22" r="7" fill="white" opacity="0.55"/>
+        </svg>
+
+        <!-- Donut blob -->
+        <svg class="blob-demo" width="90" height="90" viewBox="0 0 90 90">
+          <defs>
+            <radialGradient id="g3" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#C8C0F0"/>
+              <stop offset="55%" stop-color="#A89CE0"/>
+              <stop offset="100%" stop-color="#6A60A8"/>
+            </radialGradient>
+            <mask id="ring">
+              <rect width="90" height="90" fill="white"/>
+              <circle cx="45" cy="45" r="16" fill="black"/>
+            </mask>
+          </defs>
+          <circle cx="45" cy="45" r="38" fill="url(#g3)" mask="url(#ring)" filter="drop-shadow(0 6px 18px rgba(100,88,160,0.26))"/>
+          <ellipse cx="32" cy="24" rx="6" ry="4" fill="white" opacity="0.5" transform="rotate(-20,32,24)"/>
+        </svg>
+      </div>
+
+      <div class="blob-props">
+        <div class="blob-prop">
+          <div class="blob-swatch" style="background:#C8C0F0;"></div>
+          <div class="blob-prop-info">
+            <div class="blob-prop-label">Specular Highlight</div>
+            <div class="blob-prop-value">#C8C0F0 · top-left · 12% of area</div>
+          </div>
+        </div>
+        <div class="blob-prop">
+          <div class="blob-swatch" style="background:#A89CE0;"></div>
+          <div class="blob-prop-info">
+            <div class="blob-prop-label">Mid Fill</div>
+            <div class="blob-prop-value">#A89CE0 · base hue · 45–80%</div>
+          </div>
+        </div>
+        <div class="blob-prop">
+          <div class="blob-swatch" style="background:#6A60A8;"></div>
+          <div class="blob-prop-info">
+            <div class="blob-prop-label">Shadow Edge</div>
+            <div class="blob-prop-value">#6A60A8 · bottom-right</div>
+          </div>
+        </div>
+        <div class="blob-prop">
+          <div class="blob-swatch" style="background:rgba(100,88,160,0.2);border:1px solid #ccc;"></div>
+          <div class="blob-prop-info">
+            <div class="blob-prop-label">Cast Shadow</div>
+            <div class="blob-prop-value">rgba(100,88,160,.2) · blur 24px</div>
+          </div>
+        </div>
+        <div class="blob-prop">
+          <div class="blob-swatch" style="background:#EAEAF2;border:1px solid var(--color-rule);border-radius:4px;"></div>
+          <div class="blob-prop-info">
+            <div class="blob-prop-label">White Gloss Dot</div>
+            <div class="blob-prop-value">rgba(255,255,255,.6) · ~10px r</div>
+          </div>
+        </div>
+        <p class="t-caption-demo" style="margin-top:var(--space-2);">Hue never changes between variants — only luminance. Blobs always slightly rotated, never upright.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ───────── COMPONENTS ───────── -->
+<section id="components">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">05</span> Components</p>
+
+    <div class="comp-grid">
+
+      <!-- Tags -->
+      <div class="comp-block">
+        <p class="comp-block-label">Tags / Chips</p>
+        <div class="chip-group">
+          <span class="chip">Mind</span>
+          <span class="chip">Focus</span>
+          <span class="chip filled">Active</span>
+          <span class="chip">Muted</span>
+          <span class="chip">Out</span>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="comp-block">
+        <p class="comp-block-label">Buttons</p>
+        <div class="btn-group">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-outline">Outline</button>
+          <button class="btn btn-blob">Blob</button>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="comp-block">
+        <p class="comp-block-label">Input</p>
+        <label class="ds-input-label">Your State</label>
+        <div class="ds-input-wrap">
+          <input class="ds-input" type="text" placeholder="Out of mind…">
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="comp-block" style="background:transparent;padding:0;">
+        <p class="comp-block-label">Card</p>
+        <div class="ds-card">
+          <div class="ds-card-eyebrow">State 04</div>
+          <div class="ds-card-title">Out of Mind</div>
+          <p class="ds-card-body">The flat grounds; the volumetric floats. Neither dominates — designed tension between two materials on the same plane.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Poster demo -->
+    <div class="mt-5" style="display:flex;gap:var(--space-5);align-items:flex-start;flex-wrap:wrap;">
+      <div>
+        <p class="comp-block-label">Poster Block</p>
+        <div class="poster-demo">
+          <div class="poster-demo-corners">
+            <span class="pc tl">MIND</span>
+            <span class="pc tr">MIND</span>
+            <span class="pc bl">OUT</span>
+            <span class="pc br">OUT</span>
+          </div>
+          <div class="poster-demo-type">
+            MIND<br>MIND<br>MIND<br>MIND<br>MIND
+          </div>
+          <div class="poster-demo-blobs">
+            <svg viewBox="0 0 360 480" width="100%" height="100%">
+              <defs>
+                <radialGradient id="pg" cx="32%" cy="28%" r="68%">
+                  <stop offset="0%" stop-color="#D0C8F4"/>
+                  <stop offset="50%" stop-color="#A89CE0"/>
+                  <stop offset="100%" stop-color="#6A60A8"/>
+                </radialGradient>
+              </defs>
+              <g filter="drop-shadow(0 8px 20px rgba(100,88,160,0.22))">
+                <ellipse cx="120" cy="150" rx="70" ry="55" fill="url(#pg)" transform="rotate(-12,120,150)"/>
+                <circle cx="98" cy="130" r="10" fill="white" opacity="0.55"/>
+              </g>
+              <g filter="drop-shadow(0 6px 18px rgba(100,88,160,0.2))">
+                <rect x="210" y="100" width="50" height="130" rx="25" fill="url(#pg)" transform="rotate(5,235,165)"/>
+                <circle cx="218" cy="115" r="7" fill="white" opacity="0.5"/>
+              </g>
+              <g filter="drop-shadow(0 10px 24px rgba(100,88,160,0.24))">
+                <ellipse cx="110" cy="330" rx="80" ry="58" fill="url(#pg)" transform="rotate(8,110,330)"/>
+                <circle cx="88" cy="308" r="9" fill="white" opacity="0.52"/>
+              </g>
+              <g filter="drop-shadow(0 8px 20px rgba(100,88,160,0.22))">
+                <ellipse cx="260" cy="320" rx="65" ry="52" fill="url(#pg)" transform="rotate(-6,260,320)"/>
+                <circle cx="240" cy="300" r="8" fill="white" opacity="0.5"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:240px;padding-top:var(--space-5);">
+        <p class="comp-block-label" style="margin-bottom:var(--space-4);">Layout Rules</p>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <div style="display:flex;gap:var(--space-3);">
+            <div style="width:3px;background:var(--color-blob);border-radius:2px;flex-shrink:0;"></div>
+            <p class="t-body-demo" style="font-size:13px;">Stack one word 5× at <code style="font-size:11px;background:var(--color-surface-2);padding:1px 5px;border-radius:4px;">line-height: 0.88</code> — lines compress intentionally</p>
+          </div>
+          <div style="display:flex;gap:var(--space-3);">
+            <div style="width:3px;background:var(--color-blob);border-radius:2px;flex-shrink:0;"></div>
+            <p class="t-body-demo" style="font-size:13px;">Four corner anchors frame the composition — labels mirror left/right</p>
+          </div>
+          <div style="display:flex;gap:var(--space-3);">
+            <div style="width:3px;background:var(--color-blob);border-radius:2px;flex-shrink:0;"></div>
+            <p class="t-body-demo" style="font-size:13px;">Blobs sit on <code style="font-size:11px;background:var(--color-surface-2);padding:1px 5px;border-radius:4px;">z-index: 2</code>, always overlapping flat type</p>
+          </div>
+          <div style="display:flex;gap:var(--space-3);">
+            <div style="width:3px;background:var(--color-blob);border-radius:2px;flex-shrink:0;"></div>
+            <p class="t-body-demo" style="font-size:13px;">Flat type is inert — never animated, never hovered</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ───────── MOTION ───────── -->
+<section id="motion">
+  <div class="ds-wrap">
+    <p class="section-label"><span class="section-num">06</span> Motion</p>
+
+    <div class="motion-demos">
+      <div class="motion-block">
+        <div class="motion-orb spring"></div>
+        <span class="motion-label">Spring</span>
+        <span class="motion-ease">cubic-bezier(.34,1.56,.64,1)</span>
+      </div>
+      <div class="motion-block">
+        <div class="motion-orb breathe"></div>
+        <span class="motion-label">Breathe</span>
+        <span class="motion-ease">ease-in-out · 3s</span>
+      </div>
+      <div class="motion-block">
+        <div class="motion-orb rotate"></div>
+        <span class="motion-label">Rotate</span>
+        <span class="motion-ease">linear · 4s</span>
+      </div>
+    </div>
+
+    <div class="mt-5" style="background:var(--color-surface-2);border-radius:16px;padding:var(--space-5);">
+      <p class="comp-block-label" style="margin-bottom:var(--space-4);">Motion Principles</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+        <div>
+          <p class="t-label-demo" style="margin-bottom:var(--space-2);">Blobs move · type stays</p>
+          <p style="font-size:13px;color:var(--color-ink-muted);">The flat typographic stack is the anchor — immovable. Blobs breathe, float, and react. Motion reinforces the material hierarchy.</p>
+        </div>
+        <div>
+          <p class="t-label-demo" style="margin-bottom:var(--space-2);">Gravity · Physics</p>
+          <p style="font-size:13px;color:var(--color-ink-muted);">Entrances use overshoot easing — spring physics. Blobs feel weighted, not mechanical. Cast shadows shift slightly during float loops.</p>
+        </div>
+        <div>
+          <p class="t-label-demo" style="margin-bottom:var(--space-2);">Duration Scale</p>
+          <p style="font-size:13px;color:var(--color-ink-muted);">Hover: 200–300ms. Idle float: 4–5s. Page entrance: 600–900ms with staggered delays. Nothing snaps; nothing lingers.</p>
+        </div>
+        <div>
+          <p class="t-label-demo" style="margin-bottom:var(--space-2);">Parallax Layer</p>
+          <p style="font-size:13px;color:var(--color-ink-muted);">On scroll, blobs move at 0.7× the scroll rate vs. flat type — subtle depth without full 3D perspective transforms.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:var(--space-6) 0 var(--space-7);border-top:1px solid var(--color-rule);">
+  <div class="ds-wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);">
+    <div>
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--color-ink);">MIND<span style="color:var(--color-blob);">.</span></div>
+      <p style="font-size:12px;color:var(--color-ink-muted);margin-top:4px;">Design System v1.0</p>
+    </div>
+    <div style="text-align:right;">
+      <p class="t-caption-demo">Extracted from <em>Out of Mind</em> poster</p>
+      <p class="t-caption-demo" style="margin-top:2px;">Bebas Neue · DM Sans · #A89CE0</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

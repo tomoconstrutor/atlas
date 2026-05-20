@@ -31,7 +31,7 @@ Main content and configuration live in:
 - `data/opportunities.ts`
 - `data/materials.ts`
 
-The selected industry drives the exportable kit. Visitors can download the kit as a `.txt` file, or enter an email to open a prefilled `mailto:` draft.
+The selected industry drives the exportable report. Visitors can preview the MIND-style report in the page, download it as a PDF, or enter an email to open a prefilled `mailto:` note.
 
 The CTA email is configured in `data/site.ts`:
 

@@ -1,11 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ReportPreview } from "@/components/ReportPreview";
 import { SectionLabel } from "@/components/SectionLabel";
 import { uiIcons } from "@/components/icons";
 import { siteText } from "@/data/site";
-import { buildEmailSubject, buildExportFilename, buildIndustryKit, isValidEmail } from "@/lib/exportKit";
 import { text } from "@/lib/localize";
+import { generateReportPdf } from "@/lib/reportPdf";
+import {
+  buildReportEmailBody,
+  buildReportEmailSubject,
+  buildReportFilename,
+  buildReportKit,
+  isValidEmail
+} from "@/lib/reportKit";
 import type { Industry, Locale } from "@/types/content";
 
 type MaterialsKitProps = {
@@ -17,29 +25,39 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const DownloadIcon = uiIcons.Download;
   const FileIcon = uiIcons.FileText;
   const MailIcon = uiIcons.Mail;
   const CopyIcon = uiIcons.Copy;
   const CheckIcon = uiIcons.Check;
 
-  const kitText = useMemo(() => buildIndustryKit(industry, locale), [industry, locale]);
-  const filename = buildExportFilename(industry, locale);
+  const report = useMemo(() => buildReportKit(industry, locale), [industry, locale]);
+  const emailCopy = useMemo(() => buildReportEmailBody(report), [report]);
+  const filename = buildReportFilename(report);
   const hasEmail = email.trim().length > 0;
 
-  function handleDownload() {
-    const blob = new Blob([kitText], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+  async function handleDownload() {
+    setPreparing(true);
+    try {
+      const bytes = await generateReportPdf(report);
+      const pdfBuffer = new ArrayBuffer(bytes.byteLength);
+      new Uint8Array(pdfBuffer).set(bytes);
+      const blob = new Blob([pdfBuffer], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setPreparing(false);
+    }
   }
 
-  function handlePrimaryAction() {
+  async function handlePrimaryAction() {
     const targetEmail = email.trim();
     setError("");
 
@@ -53,13 +71,13 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
       return;
     }
 
-    const subject = encodeURIComponent(buildEmailSubject(industry, locale));
-    const body = encodeURIComponent(kitText);
+    const subject = encodeURIComponent(buildReportEmailSubject(report));
+    const body = encodeURIComponent(emailCopy);
     window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
   }
 
-  async function handleCopyKit() {
-    await navigator.clipboard.writeText(kitText);
+  async function handleCopyEmail() {
+    await navigator.clipboard.writeText(emailCopy);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
   }
@@ -69,7 +87,7 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
       <div className="mx-auto max-w-6xl">
         <SectionLabel number="03">{text(siteText.sections.materials, locale)}</SectionLabel>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-[1fr_.9fr]">
+        <div className="mt-10 grid gap-4 lg:grid-cols-[.82fr_.58fr]">
           <div className="rounded-[20px] bg-mind-surface2 p-6 shadow-mindMd sm:p-8">
             <div className="flex items-start justify-between gap-5">
               <div>
@@ -135,23 +153,29 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
             {error ? (
               <p className="mt-3 text-sm font-light leading-6 text-mind-blob-light">{error}</p>
             ) : (
-              <p className="mt-3 text-sm font-light leading-6 text-[rgba(234,234,242,0.64)]">
-                {text(siteText.materials.filenameNote, locale)}
-              </p>
+              <div className="mt-3 space-y-1 text-sm font-light leading-6 text-[rgba(234,234,242,0.64)]">
+                <p>{text(siteText.materials.filenameNote, locale)}</p>
+                <p>{text(siteText.materials.emailNote, locale)}</p>
+              </div>
             )}
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={handlePrimaryAction}
+                disabled={preparing}
                 className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-mind-bg px-6 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03]"
               >
                 {hasEmail ? <MailIcon size={18} /> : <DownloadIcon size={18} />}
-                {hasEmail ? text(siteText.materials.emailButton, locale) : text(siteText.materials.downloadButton, locale)}
+                {preparing
+                  ? text(siteText.materials.preparing, locale)
+                  : hasEmail
+                    ? text(siteText.materials.emailButton, locale)
+                    : text(siteText.materials.downloadButton, locale)}
               </button>
               <button
                 type="button"
-                onClick={handleCopyKit}
+                onClick={handleCopyEmail}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[rgba(234,234,242,0.26)] px-6 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-bg transition hover:scale-[1.03] hover:border-mind-bg"
               >
                 {copied ? <CheckIcon size={18} /> : <CopyIcon size={18} />}
@@ -159,6 +183,10 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
               </button>
             </div>
           </div>
+        </div>
+
+        <div className="mt-5 rounded-[20px] bg-mind-surface2 p-4 shadow-mindSm sm:p-6">
+          <ReportPreview report={report} />
         </div>
       </div>
     </section>

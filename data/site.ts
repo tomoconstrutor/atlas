@@ -107,10 +107,10 @@ export const siteText = {
   },
   materials: {
     eyebrow: t("Ready-to-send asset", "Asset pronto a enviar"),
-    headline: t("Export the selected industry kit", "Exporta o kit do setor selecionado"),
+    headline: t("Export the selected report", "Exporta o relatorio do setor selecionado"),
     body: t(
-      "One compact file with workflows, prompts, mini-tools, and outreach copy for the industry currently open.",
-      "Um ficheiro compacto com workflows, prompts, mini-tools e copy de outreach para o setor aberto."
+      "A polished MIND-style report with workflows, prompts, mini-tools, and outreach copy for the industry currently open.",
+      "Um relatorio polido em estilo MIND com workflows, prompts, mini-tools e copy de outreach para o setor aberto."
     ),
     previewTitle: t("Included", "Inclui"),
     previewItems: [
@@ -121,12 +121,14 @@ export const siteText = {
     ],
     emailLabel: t("Send to email", "Enviar para email"),
     emailPlaceholder: t("name@company.com", "nome@empresa.com"),
-    downloadButton: t("Download kit", "Download kit"),
-    emailButton: t("Email kit", "Enviar kit"),
-    invalidEmail: t("Enter a valid email or leave it empty to download.", "Usa um email valido ou deixa vazio para download."),
-    copyButton: t("Copy kit", "Copiar kit"),
-    copied: t("Kit copied", "Kit copiado"),
-    filenameNote: t("If no email is entered, the kit downloads as a text file.", "Sem email, o kit fica disponivel como ficheiro de texto.")
+    downloadButton: t("Download PDF", "Download PDF"),
+    emailButton: t("Email note", "Enviar nota"),
+    invalidEmail: t("Enter a valid email or leave it empty to download the PDF.", "Usa um email valido ou deixa vazio para download do PDF."),
+    copyButton: t("Copy email copy", "Copiar copy de email"),
+    copied: t("Email copy copied", "Copy de email copiada"),
+    preparing: t("Preparing PDF", "A preparar PDF"),
+    filenameNote: t("If no email is entered, the report downloads as a PDF.", "Sem email, o relatorio fica disponivel como PDF."),
+    emailNote: t("Email opens a prefilled note. The PDF still downloads from this page.", "O email abre uma nota preenchida. O PDF continua a sair desta pagina.")
   },
   cta: {
     headline: t("Custom AI Map", "Mapa AI personalizado"),

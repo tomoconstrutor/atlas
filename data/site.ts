@@ -119,21 +119,16 @@ export const siteText = {
       t("Prompt cards", "Prompts"),
       t("Outreach email copy", "Copy de email")
     ],
-    emailLabel: t("Send to email", "Enviar para email"),
+    emailLabel: t("Email", "Email"),
     emailPlaceholder: t("name@company.com", "nome@empresa.com"),
     downloadButton: t("Download PDF", "Download PDF"),
-    emailButton: t("Send PDF", "Enviar PDF"),
-    emailFallbackButton: t("Email note", "Enviar nota"),
-    invalidEmail: t("Enter a valid email or leave it empty to download the PDF.", "Usa um email valido ou deixa vazio para download do PDF."),
+    invalidEmail: t("Enter a valid email to download the PDF.", "Usa um email valido para fazer download do PDF."),
     copyButton: t("Copy email copy", "Copiar copy de email"),
     copied: t("Email copy copied", "Copy de email copiada"),
     preparing: t("Preparing PDF", "A preparar PDF"),
-    sending: t("Sending PDF", "A enviar PDF"),
-    sent: t("Sent. Check the inbox for the PDF report.", "Enviado. Ve a inbox para encontrar o relatorio PDF."),
-    sendFailed: t("Could not send the PDF right now. Try again or leave the email empty to download it.", "Nao foi possivel enviar o PDF agora. Tenta outra vez ou deixa o email vazio para download."),
-    filenameNote: t("If no email is entered, the report downloads as a PDF.", "Sem email, o relatorio fica disponivel como PDF."),
-    emailNote: t("With email delivery configured, the PDF is sent directly with the report attached.", "Com envio de email configurado, o PDF e enviado diretamente em anexo."),
-    emailFallbackNote: t("Email delivery is not configured here yet, so email opens a prefilled note.", "O envio direto ainda nao esta configurado aqui, por isso o email abre uma nota preenchida.")
+    captured: t("Email added. Your PDF download has started.", "Email adicionado. O download do PDF ja comecou."),
+    filenameNote: t("Add an email to download the report as a PDF.", "Adiciona um email para descarregar o relatorio em PDF."),
+    emailNote: t("The report preview stays available below while the PDF is prepared.", "A preview do relatorio continua disponivel abaixo enquanto o PDF e preparado.")
   },
   cta: {
     headline: t("Custom AI Map", "Mapa AI personalizado"),

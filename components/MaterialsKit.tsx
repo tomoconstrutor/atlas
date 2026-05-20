@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ReportPreview } from "@/components/ReportPreview";
 import { SectionLabel } from "@/components/SectionLabel";
 import { uiIcons } from "@/components/icons";
 import { siteText } from "@/data/site";
 import { text } from "@/lib/localize";
-import { hasReportEmailEndpoint, sendReportEmail } from "@/lib/reportDelivery";
 import { generateReportPdf } from "@/lib/reportPdf";
 import {
   buildReportEmailBody,
-  buildReportEmailSubject,
   buildReportFilename,
   buildReportKit,
   isValidEmail
@@ -26,23 +24,16 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [captured, setCaptured] = useState(false);
   const [preparing, setPreparing] = useState(false);
-  const [sent, setSent] = useState(false);
   const DownloadIcon = uiIcons.Download;
   const FileIcon = uiIcons.FileText;
-  const MailIcon = uiIcons.Mail;
   const CopyIcon = uiIcons.Copy;
   const CheckIcon = uiIcons.Check;
 
   const report = useMemo(() => buildReportKit(industry, locale), [industry, locale]);
   const emailCopy = useMemo(() => buildReportEmailBody(report), [report]);
   const filename = buildReportFilename(report);
-  const hasEmail = email.trim().length > 0;
-  const canSendDirectly = hasReportEmailEndpoint();
-
-  useEffect(() => {
-    setSent(false);
-  }, [report]);
 
   async function handleDownload() {
     setPreparing(true);
@@ -64,52 +55,44 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
     }
   }
 
+  function rememberEmailCapture(targetEmail: string) {
+    try {
+      const key = "ai-atlas-report-captures";
+      const existing = JSON.parse(window.localStorage.getItem(key) ?? "[]") as Array<{
+        email: string;
+        industryId: string;
+        locale: Locale;
+        capturedAt: string;
+      }>;
+      const next = [
+        {
+          email: targetEmail,
+          industryId: report.industryId,
+          locale,
+          capturedAt: new Date().toISOString()
+        },
+        ...existing.filter((item) => item.email !== targetEmail)
+      ].slice(0, 20);
+
+      window.localStorage.setItem(key, JSON.stringify(next));
+    } catch {
+      // Local capture is a convenience for static hosting; download should still continue.
+    }
+  }
+
   async function handlePrimaryAction() {
     const targetEmail = email.trim();
     setError("");
-    setSent(false);
+    setCaptured(false);
 
-    if (!targetEmail) {
-      handleDownload();
-      return;
-    }
-
-    if (!isValidEmail(targetEmail)) {
+    if (!targetEmail || !isValidEmail(targetEmail)) {
       setError(text(siteText.materials.invalidEmail, locale));
       return;
     }
 
-    if (!canSendDirectly) {
-      const subject = encodeURIComponent(buildReportEmailSubject(report));
-      const body = encodeURIComponent(emailCopy);
-      window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
-      return;
-    }
-
-    setPreparing(true);
-    try {
-      const pdfBytes = await generateReportPdf(report);
-      const result = await sendReportEmail({
-        to: targetEmail,
-        subject: buildReportEmailSubject(report),
-        text: emailCopy,
-        filename,
-        pdfBytes,
-        industryId: report.industryId,
-        locale
-      });
-
-      if (!result.ok) {
-        setError(result.message ?? text(siteText.materials.sendFailed, locale));
-        return;
-      }
-
-      setSent(true);
-    } catch {
-      setError(text(siteText.materials.sendFailed, locale));
-    } finally {
-      setPreparing(false);
-    }
+    rememberEmailCapture(targetEmail);
+    await handleDownload();
+    setCaptured(true);
   }
 
   async function handleCopyEmail() {
@@ -178,7 +161,7 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
                 onChange={(event) => {
                   setEmail(event.target.value);
                   setError("");
-                  setSent(false);
+                  setCaptured(false);
                 }}
                 type="email"
                 inputMode="email"
@@ -189,14 +172,14 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
 
             {error ? (
               <p className="mt-3 text-sm font-light leading-6 text-mind-blob-light">{error}</p>
-            ) : sent ? (
+            ) : captured ? (
               <p className="mt-3 text-sm font-light leading-6 text-mind-blob-light">
-                {text(siteText.materials.sent, locale)}
+                {text(siteText.materials.captured, locale)}
               </p>
             ) : (
               <div className="mt-3 space-y-1 text-sm font-light leading-6 text-[rgba(234,234,242,0.64)]">
                 <p>{text(siteText.materials.filenameNote, locale)}</p>
-                <p>{text(canSendDirectly ? siteText.materials.emailNote : siteText.materials.emailFallbackNote, locale)}</p>
+                <p>{text(siteText.materials.emailNote, locale)}</p>
               </div>
             )}
 
@@ -207,12 +190,8 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
                 disabled={preparing}
                 className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-mind-bg px-6 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03]"
               >
-                {hasEmail ? <MailIcon size={18} /> : <DownloadIcon size={18} />}
-                {preparing
-                  ? text(hasEmail ? siteText.materials.sending : siteText.materials.preparing, locale)
-                  : hasEmail
-                    ? text(canSendDirectly ? siteText.materials.emailButton : siteText.materials.emailFallbackButton, locale)
-                    : text(siteText.materials.downloadButton, locale)}
+                <DownloadIcon size={18} />
+                {preparing ? text(siteText.materials.preparing, locale) : text(siteText.materials.downloadButton, locale)}
               </button>
               <button
                 type="button"

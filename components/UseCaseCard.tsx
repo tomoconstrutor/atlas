@@ -1,5 +1,4 @@
-import { EmptyRails } from "@/components/EmptyRails";
-import { hasText, text } from "@/lib/localize";
+import { text } from "@/lib/localize";
 import type { Locale, UseCase } from "@/types/content";
 
 type UseCaseCardProps = {
@@ -21,23 +20,13 @@ export function UseCaseCard({ useCase, locale }: UseCaseCardProps) {
         <span className="h-2 w-2 rounded-full bg-mind-blob" aria-hidden="true" />
       </div>
 
-      {hasText(useCase.title) ? (
-        <h4 className="font-display text-3xl uppercase leading-none text-mind-ink">{title}</h4>
-      ) : null}
+      <h4 className="font-display text-3xl uppercase leading-none text-mind-ink">{title}</h4>
 
-      {hasText(useCase.description) ? (
-        <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{description}</p>
-      ) : null}
+      <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{description}</p>
 
-      {hasText(useCase.value) ? (
-        <div className="mt-5 border-t border-[var(--color-rule)] pt-4 text-sm font-light leading-6 text-mind-ink">
-          {value}
-        </div>
-      ) : null}
-
-      {!hasText(useCase.title) && !hasText(useCase.description) && !hasText(useCase.value) ? (
-        <EmptyRails rows={3} />
-      ) : null}
+      <div className="mt-5 border-t border-[var(--color-rule)] pt-4 text-sm font-light leading-6 text-mind-ink">
+        {value}
+      </div>
     </article>
   );
 }

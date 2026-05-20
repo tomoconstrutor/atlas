@@ -29,6 +29,9 @@ Main content and configuration live in:
 - `data/site.ts`
 - `data/industries.ts`
 - `data/opportunities.ts`
+- `data/materials.ts`
+
+The selected industry drives the exportable kit. Visitors can download the kit as a `.txt` file, or enter an email to open a prefilled `mailto:` draft.
 
 The CTA email is configured in `data/site.ts`:
 

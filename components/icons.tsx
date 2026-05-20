@@ -4,8 +4,11 @@ import {
   Check,
   Copy,
   Cpu,
+  Download,
+  FileText,
   HeartPulse,
   Layers3,
+  Mail,
   Map,
   MousePointer2,
   Route,
@@ -27,7 +30,10 @@ export const industryIcons: Record<IconName, LucideIcon> = {
 export const uiIcons = {
   Check,
   Copy,
+  Download,
+  FileText,
   Layers3,
+  Mail,
   Map,
   MousePointer2,
   Route

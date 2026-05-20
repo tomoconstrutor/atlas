@@ -1,4 +1,3 @@
-import { EmptyRails } from "@/components/EmptyRails";
 import { GlossyBlobs } from "@/components/GlossyBlobs";
 import { BRAND_NAME, CONTACT_EMAIL, siteText } from "@/data/site";
 import { hasText, text } from "@/lib/localize";
@@ -13,7 +12,7 @@ export function Hero({ locale }: HeroProps) {
   const hasHeroCopy = hasText(siteText.hero.headline) || hasText(siteText.hero.subheadline);
   const mailto = CONTACT_EMAIL
     ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Custom AI Map Request")}`
-    : "";
+    : "#materials";
   const MapIcon = uiIcons.Map;
   const MouseIcon = uiIcons.MousePointer2;
 
@@ -87,7 +86,9 @@ export function Hero({ locale }: HeroProps) {
                   <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-mind-muted">
                     {text(label, locale)}
                   </span>
-                  <EmptyRails rows={1} compact />
+                  <span className="text-sm font-light leading-6 text-mind-ink">
+                    {text(siteText.hero.cardValues[index], locale)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -100,23 +101,12 @@ export function Hero({ locale }: HeroProps) {
             >
               {text(siteText.hero.primaryCta, locale)}
             </a>
-            {mailto ? (
-              <a
-                href={mailto}
-                className="inline-flex min-h-11 items-center rounded-full border-[1.5px] border-mind-ink px-7 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03] hover:bg-mind-ink hover:text-mind-bg"
-              >
-                {text(siteText.hero.secondaryCta, locale)}
-              </a>
-            ) : (
-              <button
-                type="button"
-                className="inline-flex min-h-11 cursor-default items-center rounded-full border-[1.5px] border-mind-ink px-7 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink opacity-70"
-                aria-disabled="true"
-                title={text(siteText.cta.disabledHint, locale)}
-              >
-                {text(siteText.hero.secondaryCta, locale)}
-              </button>
-            )}
+            <a
+              href={mailto}
+              className="inline-flex min-h-11 items-center rounded-full border-[1.5px] border-mind-ink px-7 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03] hover:bg-mind-ink hover:text-mind-bg"
+            >
+              {text(siteText.hero.secondaryCta, locale)}
+            </a>
           </div>
         </div>
       </div>

@@ -8,13 +8,17 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { IndustryExplorer } from "@/components/IndustryExplorer";
+import { MaterialsKit } from "@/components/MaterialsKit";
 import { UniversalOpportunities } from "@/components/UniversalOpportunities";
+import { industries } from "@/data/industries";
 import type { Locale } from "@/types/content";
 
 export function AtlasExperience() {
   const [locale, setLocale] = useState<Locale>("en");
   const [selectedIndustryId, setSelectedIndustryId] = useState("real-estate");
   const [copiedPromptId, setCopiedPromptId] = useState<string | null>(null);
+  const selectedIndustry =
+    industries.find((industry) => industry.id === selectedIndustryId) ?? industries[0];
 
   function handleSelectIndustry(id: string) {
     setSelectedIndustryId(id);
@@ -49,6 +53,7 @@ export function AtlasExperience() {
         onSelectIndustry={handleSelectIndustry}
         onCopyPrompt={handleCopyPrompt}
       />
+      <MaterialsKit industry={selectedIndustry} locale={locale} />
       <UniversalOpportunities locale={locale} />
       <HowItWorks locale={locale} />
       <CTASection locale={locale} />

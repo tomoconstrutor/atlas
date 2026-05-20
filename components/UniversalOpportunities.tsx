@@ -1,8 +1,7 @@
-import { EmptyRails } from "@/components/EmptyRails";
 import { SectionLabel } from "@/components/SectionLabel";
 import { opportunities } from "@/data/opportunities";
 import { siteText } from "@/data/site";
-import { hasText, text } from "@/lib/localize";
+import { text } from "@/lib/localize";
 import type { Locale } from "@/types/content";
 import { uiIcons } from "@/components/icons";
 
@@ -16,7 +15,7 @@ export function UniversalOpportunities({ locale }: UniversalOpportunitiesProps) 
   return (
     <section id="opportunities" className="scroll-mt-24 border-t border-[var(--color-rule)] px-4 py-16 sm:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
-        <SectionLabel number="03">{text(siteText.sections.opportunities, locale)}</SectionLabel>
+        <SectionLabel number="04">{text(siteText.sections.opportunities, locale)}</SectionLabel>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {opportunities.map((opportunity, index) => (
@@ -37,23 +36,13 @@ export function UniversalOpportunities({ locale }: UniversalOpportunitiesProps) 
                 {text(opportunity.title, locale)}
               </h3>
 
-              {hasText(opportunity.meaning) ? (
-                <p className="mt-4 text-sm font-light leading-6 text-mind-muted">
-                  {text(opportunity.meaning, locale)}
-                </p>
-              ) : null}
+              <p className="mt-4 text-sm font-light leading-6 text-mind-muted">
+                {text(opportunity.meaning, locale)}
+              </p>
 
-              {hasText(opportunity.example) ? (
-                <p className="mt-5 border-t border-[var(--color-rule)] pt-4 text-sm font-light leading-6 text-mind-ink">
-                  {text(opportunity.example, locale)}
-                </p>
-              ) : null}
-
-              {!hasText(opportunity.meaning) && !hasText(opportunity.example) ? (
-                <div className="mt-6">
-                  <EmptyRails rows={3} />
-                </div>
-              ) : null}
+              <p className="mt-5 border-t border-[var(--color-rule)] pt-4 text-sm font-light leading-6 text-mind-ink">
+                {text(opportunity.example, locale)}
+              </p>
             </article>
           ))}
         </div>

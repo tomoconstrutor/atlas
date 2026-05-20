@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI Atlas",
-  description: "A MIND-based interactive map for practical AI opportunities."
+  description: "A practical AI leverage map with industry workflows, prompts, and exportable outreach materials."
 };
 
 export default function RootLayout({

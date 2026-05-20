@@ -10,7 +10,7 @@ type HeaderProps = {
 export function Header({ locale, onLocaleChange }: HeaderProps) {
   const ctaHref = CONTACT_EMAIL
     ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Custom AI Map Request")}`
-    : "";
+    : "#materials";
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-rule)] bg-[rgba(234,234,242,0.88)] px-4 py-3 backdrop-blur-md sm:px-10">
@@ -29,6 +29,9 @@ export function Header({ locale, onLocaleChange }: HeaderProps) {
           </a>
           <a className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted transition hover:text-mind-ink" href="#opportunities">
             {text(siteText.nav.opportunities, locale)}
+          </a>
+          <a className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted transition hover:text-mind-ink" href="#materials">
+            {text(siteText.nav.materials, locale)}
           </a>
         </div>
 
@@ -51,23 +54,12 @@ export function Header({ locale, onLocaleChange }: HeaderProps) {
             ))}
           </div>
 
-          {ctaHref ? (
-            <a
-              href={ctaHref}
-              className="hidden min-h-11 items-center rounded-full bg-mind-ink px-6 pb-2 pt-2.5 font-display text-lg uppercase tracking-[0.04em] text-mind-bg transition hover:scale-[1.03] hover:shadow-mindMd sm:inline-flex"
-            >
-              {text(siteText.nav.cta, locale)}
-            </a>
-          ) : (
-            <button
-              type="button"
-              className="hidden min-h-11 cursor-default items-center rounded-full bg-mind-ink px-6 pb-2 pt-2.5 font-display text-lg uppercase tracking-[0.04em] text-mind-bg opacity-80 sm:inline-flex"
-              aria-disabled="true"
-              title={text(siteText.cta.disabledHint, locale)}
-            >
-              {text(siteText.nav.cta, locale)}
-            </button>
-          )}
+          <a
+            href={ctaHref}
+            className="hidden min-h-11 items-center rounded-full bg-mind-ink px-6 pb-2 pt-2.5 font-display text-lg uppercase tracking-[0.04em] text-mind-bg transition hover:scale-[1.03] hover:shadow-mindMd sm:inline-flex"
+          >
+            {text(siteText.nav.cta, locale)}
+          </a>
         </div>
       </nav>
     </header>

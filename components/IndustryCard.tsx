@@ -1,7 +1,6 @@
-import { EmptyRails } from "@/components/EmptyRails";
 import { industryIcons } from "@/components/icons";
 import { siteText } from "@/data/site";
-import { hasText, text } from "@/lib/localize";
+import { text } from "@/lib/localize";
 import type { Industry, Locale } from "@/types/content";
 
 type IndustryCardProps = {
@@ -41,13 +40,7 @@ export function IndustryCard({ industry, locale, selected, onSelect }: IndustryC
 
       <h3 className="mt-7 font-display text-4xl uppercase leading-none text-mind-ink">{name}</h3>
 
-      {hasText(industry.subtitle) ? (
-        <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{text(industry.subtitle, locale)}</p>
-      ) : (
-        <div className="mt-5">
-          <EmptyRails rows={2} compact />
-        </div>
-      )}
+      <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{text(industry.subtitle, locale)}</p>
 
       {industry.tags.length ? (
         <div className="mt-5 flex flex-wrap gap-2">

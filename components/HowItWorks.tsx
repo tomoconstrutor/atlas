@@ -1,7 +1,6 @@
-import { EmptyRails } from "@/components/EmptyRails";
 import { SectionLabel } from "@/components/SectionLabel";
 import { siteText } from "@/data/site";
-import { hasText, text } from "@/lib/localize";
+import { text } from "@/lib/localize";
 import type { Locale } from "@/types/content";
 import { uiIcons } from "@/components/icons";
 
@@ -15,7 +14,7 @@ export function HowItWorks({ locale }: HowItWorksProps) {
   return (
     <section className="border-t border-[var(--color-rule)] px-4 py-16 sm:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
-        <SectionLabel number="04">{text(siteText.sections.howItWorks, locale)}</SectionLabel>
+        <SectionLabel number="05">{text(siteText.sections.howItWorks, locale)}</SectionLabel>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {siteText.how.steps.map((step, index) => (
@@ -31,13 +30,7 @@ export function HowItWorks({ locale }: HowItWorksProps) {
               <h3 className="font-display text-4xl uppercase leading-none text-mind-ink">
                 {text(step.title, locale)}
               </h3>
-              {hasText(step.body) ? (
-                <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{text(step.body, locale)}</p>
-              ) : (
-                <div className="mt-6">
-                  <EmptyRails rows={3} />
-                </div>
-              )}
+              <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{text(step.body, locale)}</p>
             </article>
           ))}
         </div>

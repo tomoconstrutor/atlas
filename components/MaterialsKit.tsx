@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ReportPreview } from "@/components/ReportPreview";
 import { SectionLabel } from "@/components/SectionLabel";
 import { uiIcons } from "@/components/icons";
 import { siteText } from "@/data/site";
 import { text } from "@/lib/localize";
+import { hasReportEmailEndpoint, sendReportEmail } from "@/lib/reportDelivery";
 import { generateReportPdf } from "@/lib/reportPdf";
 import {
   buildReportEmailBody,
@@ -26,6 +27,7 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [preparing, setPreparing] = useState(false);
+  const [sent, setSent] = useState(false);
   const DownloadIcon = uiIcons.Download;
   const FileIcon = uiIcons.FileText;
   const MailIcon = uiIcons.Mail;
@@ -36,6 +38,11 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
   const emailCopy = useMemo(() => buildReportEmailBody(report), [report]);
   const filename = buildReportFilename(report);
   const hasEmail = email.trim().length > 0;
+  const canSendDirectly = hasReportEmailEndpoint();
+
+  useEffect(() => {
+    setSent(false);
+  }, [report]);
 
   async function handleDownload() {
     setPreparing(true);
@@ -60,6 +67,7 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
   async function handlePrimaryAction() {
     const targetEmail = email.trim();
     setError("");
+    setSent(false);
 
     if (!targetEmail) {
       handleDownload();
@@ -71,9 +79,37 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
       return;
     }
 
-    const subject = encodeURIComponent(buildReportEmailSubject(report));
-    const body = encodeURIComponent(emailCopy);
-    window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+    if (!canSendDirectly) {
+      const subject = encodeURIComponent(buildReportEmailSubject(report));
+      const body = encodeURIComponent(emailCopy);
+      window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    setPreparing(true);
+    try {
+      const pdfBytes = await generateReportPdf(report);
+      const result = await sendReportEmail({
+        to: targetEmail,
+        subject: buildReportEmailSubject(report),
+        text: emailCopy,
+        filename,
+        pdfBytes,
+        industryId: report.industryId,
+        locale
+      });
+
+      if (!result.ok) {
+        setError(result.message ?? text(siteText.materials.sendFailed, locale));
+        return;
+      }
+
+      setSent(true);
+    } catch {
+      setError(text(siteText.materials.sendFailed, locale));
+    } finally {
+      setPreparing(false);
+    }
   }
 
   async function handleCopyEmail() {
@@ -142,6 +178,7 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
                 onChange={(event) => {
                   setEmail(event.target.value);
                   setError("");
+                  setSent(false);
                 }}
                 type="email"
                 inputMode="email"
@@ -152,10 +189,14 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
 
             {error ? (
               <p className="mt-3 text-sm font-light leading-6 text-mind-blob-light">{error}</p>
+            ) : sent ? (
+              <p className="mt-3 text-sm font-light leading-6 text-mind-blob-light">
+                {text(siteText.materials.sent, locale)}
+              </p>
             ) : (
               <div className="mt-3 space-y-1 text-sm font-light leading-6 text-[rgba(234,234,242,0.64)]">
                 <p>{text(siteText.materials.filenameNote, locale)}</p>
-                <p>{text(siteText.materials.emailNote, locale)}</p>
+                <p>{text(canSendDirectly ? siteText.materials.emailNote : siteText.materials.emailFallbackNote, locale)}</p>
               </div>
             )}
 
@@ -168,9 +209,9 @@ export function MaterialsKit({ industry, locale }: MaterialsKitProps) {
               >
                 {hasEmail ? <MailIcon size={18} /> : <DownloadIcon size={18} />}
                 {preparing
-                  ? text(siteText.materials.preparing, locale)
+                  ? text(hasEmail ? siteText.materials.sending : siteText.materials.preparing, locale)
                   : hasEmail
-                    ? text(siteText.materials.emailButton, locale)
+                    ? text(canSendDirectly ? siteText.materials.emailButton : siteText.materials.emailFallbackButton, locale)
                     : text(siteText.materials.downloadButton, locale)}
               </button>
               <button

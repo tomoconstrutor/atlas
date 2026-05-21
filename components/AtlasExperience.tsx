@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { CTASection } from "@/components/CTASection";
-import { ContextStrip } from "@/components/ContextStrip";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { HowItWorks } from "@/components/HowItWorks";
 import { IndustryExplorer } from "@/components/IndustryExplorer";
 import { MaterialsKit } from "@/components/MaterialsKit";
-import { UniversalOpportunities } from "@/components/UniversalOpportunities";
 import { industries } from "@/data/industries";
+import { captureEvent } from "@/lib/analytics";
 import type { Locale } from "@/types/content";
 
 export function AtlasExperience() {
@@ -20,11 +18,37 @@ export function AtlasExperience() {
   const selectedIndustry =
     industries.find((industry) => industry.id === selectedIndustryId) ?? industries[0];
 
+  function handleLocaleChange(nextLocale: Locale) {
+    if (nextLocale !== locale) {
+      captureEvent("language_changed", {
+        locale: nextLocale
+      });
+    }
+
+    setLocale(nextLocale);
+  }
+
   function handleSelectIndustry(id: string) {
     setSelectedIndustryId(id);
     setCopiedPromptId(null);
+    captureEvent("industry_selected", {
+      industry_id: id
+    });
     window.requestAnimationFrame(() => {
       document.getElementById("industry-detail")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+
+  function handleExploreAnotherIndustry() {
+    setCopiedPromptId(null);
+    captureEvent("explore_another_industry_clicked", {
+      industry_id: selectedIndustryId
+    });
+    window.requestAnimationFrame(() => {
+      document.getElementById("industries")?.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
@@ -38,24 +62,30 @@ export function AtlasExperience() {
 
     await navigator.clipboard.writeText(prompt);
     setCopiedPromptId(id);
+    captureEvent("prompt_copied", {
+      prompt_id: id,
+      industry_id: selectedIndustryId
+    });
     window.setTimeout(() => setCopiedPromptId(null), 1600);
   }
 
   return (
     <main>
-      <Header locale={locale} onLocaleChange={setLocale} />
+      <Header locale={locale} onLocaleChange={handleLocaleChange} />
       <Hero locale={locale} />
-      <ContextStrip locale={locale} />
       <IndustryExplorer
         locale={locale}
         selectedIndustryId={selectedIndustryId}
         copiedPromptId={copiedPromptId}
         onSelectIndustry={handleSelectIndustry}
         onCopyPrompt={handleCopyPrompt}
+        onExploreAnotherIndustry={handleExploreAnotherIndustry}
       />
-      <MaterialsKit industry={selectedIndustry} locale={locale} />
-      <UniversalOpportunities locale={locale} />
-      <HowItWorks locale={locale} />
+      <MaterialsKit
+        industry={selectedIndustry}
+        locale={locale}
+        onExploreAnotherIndustry={handleExploreAnotherIndustry}
+      />
       <CTASection locale={locale} />
       <Footer locale={locale} />
     </main>

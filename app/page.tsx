@@ -1,5 +1,5 @@
-import { AtlasExperience } from "@/components/AtlasExperience";
+import { AdvisoryExperience } from "@/components/AdvisoryExperience";
 
 export default function Home() {
-  return <AtlasExperience />;
+  return <AdvisoryExperience />;
 }

@@ -23,7 +23,7 @@ function PageShell({
   page: string;
 }) {
   return (
-    <article className="aspect-[595/842] min-h-[360px] overflow-hidden rounded-[18px] border border-[var(--color-rule)] bg-mind-bg p-5 shadow-mindMd">
+    <article className="aspect-[595/842] min-h-[260px] overflow-hidden rounded-2xl border border-[var(--color-rule)] bg-mind-bg p-4 shadow-mindSm">
       <div className="flex items-start justify-between border-b border-mind-blob pb-3">
         <div>
           <p className="font-display text-2xl uppercase leading-none text-mind-ink">MIND.</p>
@@ -42,8 +42,8 @@ function PageShell({
 
 export function ReportPreview({ report }: ReportPreviewProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-      <article className="aspect-[595/842] min-h-[360px] overflow-hidden rounded-[18px] border border-[var(--color-rule)] bg-mind-bg p-5 shadow-mindMd">
+    <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+      <article className="aspect-[595/842] min-h-[260px] overflow-hidden rounded-2xl border border-[var(--color-rule)] bg-mind-bg p-4 shadow-mindSm">
         <div className="space-y-1 font-display text-[42px] uppercase leading-[0.82] text-mind-ink">
           <p>MIND</p>
           <p className="text-mind-blob">OUT</p>
@@ -149,7 +149,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
         </div>
       </PageShell>
 
-      <article className="aspect-[595/842] min-h-[360px] overflow-hidden rounded-[18px] border border-[var(--color-rule)] bg-mind-bg p-5 shadow-mindMd">
+      <article className="aspect-[595/842] min-h-[260px] overflow-hidden rounded-2xl border border-[var(--color-rule)] bg-mind-bg p-4 shadow-mindSm">
         <div className="space-y-1 font-display text-[40px] uppercase leading-[0.82] text-mind-ink">
           <p>MIND</p>
           <p className="text-mind-blob">MIND</p>

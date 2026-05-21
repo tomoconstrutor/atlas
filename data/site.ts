@@ -79,6 +79,10 @@ export const siteText = {
     selected: t("Selected", "Selecionado"),
     route: t("Route", "Rota")
   },
+  exploreAnother: {
+    label: t("Choose a different route", "Escolher outra rota"),
+    button: t("Explore another industry", "Explorar outro setor")
+  },
   how: {
     step: t("Step", "Passo"),
     steps: [
@@ -123,12 +127,18 @@ export const siteText = {
     emailPlaceholder: t("name@company.com", "nome@empresa.com"),
     downloadButton: t("Download PDF", "Download PDF"),
     invalidEmail: t("Enter a valid email to download the PDF.", "Usa um email valido para fazer download do PDF."),
-    copyButton: t("Copy email copy", "Copiar copy de email"),
-    copied: t("Email copy copied", "Copy de email copiada"),
     preparing: t("Preparing PDF", "A preparar PDF"),
     captured: t("Email added. Your PDF download has started.", "Email adicionado. O download do PDF ja comecou."),
+    captureUnavailable: t(
+      "Lead capture is not configured yet, so the download cannot start.",
+      "A captura de leads ainda nao esta configurada, por isso o download nao pode comecar."
+    ),
+    captureFailed: t(
+      "We could not save the email. Please try again.",
+      "Nao conseguimos guardar o email. Tenta novamente."
+    ),
     filenameNote: t("Add an email to download the report as a PDF.", "Adiciona um email para descarregar o relatorio em PDF."),
-    emailNote: t("The report preview stays available below while the PDF is prepared.", "A preview do relatorio continua disponivel abaixo enquanto o PDF e preparado.")
+    emailNote: t("We will save the lead in Supabase, then start the download.", "Vamos guardar a lead no Supabase e depois iniciar o download.")
   },
   cta: {
     headline: t("Custom AI Map", "Mapa AI personalizado"),

@@ -9,7 +9,7 @@ type FooterProps = {
 export function Footer({ locale }: FooterProps) {
   return (
     <footer className="border-t border-[var(--color-rule)] px-4 py-10 sm:px-10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="font-display text-3xl uppercase tracking-[0.04em] text-mind-ink">
             AI ATLAS<span className="text-mind-blob">.</span>

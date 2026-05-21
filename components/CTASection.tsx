@@ -1,5 +1,6 @@
 import { SectionLabel } from "@/components/SectionLabel";
 import { BRAND_NAME, CONTACT_EMAIL, siteText } from "@/data/site";
+import { captureEvent } from "@/lib/analytics";
 import { text } from "@/lib/localize";
 import type { Locale } from "@/types/content";
 
@@ -13,27 +14,32 @@ export function CTASection({ locale }: CTASectionProps) {
     : "#materials";
 
   return (
-    <section className="border-t border-[var(--color-rule)] px-4 py-16 sm:px-10 lg:py-24">
-      <div className="mx-auto max-w-6xl">
-        <SectionLabel number="06">{text(siteText.sections.cta, locale)}</SectionLabel>
+    <section className="border-t border-[var(--color-rule)] px-4 py-12 sm:px-10 lg:py-16">
+      <div className="mx-auto max-w-5xl">
+        <SectionLabel number="04">{text(siteText.sections.cta, locale)}</SectionLabel>
 
-        <div className="relative mt-10 overflow-hidden rounded-[20px] bg-mind-ink p-8 text-mind-bg shadow-mindLg sm:p-12">
-          <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="relative mt-7 overflow-hidden rounded-2xl bg-mind-ink p-6 text-mind-bg shadow-mindMd sm:p-8">
+          <div className="relative z-10 grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-mind-blob-light">
                 {BRAND_NAME}
               </p>
-              <h2 className="mt-3 font-display text-[clamp(52px,8vw,96px)] uppercase leading-[0.92] text-mind-bg">
+              <h2 className="mt-2 font-display text-[clamp(42px,7vw,72px)] uppercase leading-[0.95] text-mind-bg">
                 {text(siteText.cta.headline, locale)}
               </h2>
-              <p className="mt-5 max-w-2xl text-base font-light leading-7 text-[rgba(234,234,242,0.72)]">
+              <p className="mt-4 max-w-2xl text-sm font-light leading-6 text-[rgba(234,234,242,0.72)]">
                 {text(siteText.cta.body, locale)}
               </p>
             </div>
 
             <a
               href={href}
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-mind-bg px-8 pb-2 pt-2.5 font-display text-2xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03]"
+              onClick={() =>
+                captureEvent("cta_clicked", {
+                  has_contact_email: Boolean(CONTACT_EMAIL)
+                })
+              }
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-mind-bg px-7 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03]"
             >
               {text(siteText.cta.button, locale)}
             </a>

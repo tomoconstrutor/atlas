@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { PostHogProvider } from "@/components/PostHogProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AI Atlas",
-  description: "A practical AI leverage map with industry workflows, prompts, and exportable outreach materials."
+  title: "AI Atlas | AI Advisory",
+  description: "AI Atlas filters AI noise into the few moves that matter for personal leverage."
 };
 
 export default function RootLayout({
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PostHogProvider>{children}</PostHogProvider>
+      </body>
     </html>
   );
 }

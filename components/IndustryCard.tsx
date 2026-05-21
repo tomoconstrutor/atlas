@@ -19,7 +19,7 @@ export function IndustryCard({ industry, locale, selected, onSelect }: IndustryC
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`group min-h-[210px] rounded-2xl border p-5 text-left shadow-mindSm transition duration-300 ${
+      className={`group min-h-[180px] rounded-2xl border p-4 text-left shadow-mindSm transition duration-300 ${
         selected
           ? "border-mind-blob bg-mind-surface2 shadow-mindMd"
           : "border-[var(--color-rule)] bg-mind-surface hover:-translate-y-1 hover:bg-mind-surface2 hover:shadow-mindMd"
@@ -27,23 +27,23 @@ export function IndustryCard({ industry, locale, selected, onSelect }: IndustryC
     >
       <div className="flex items-start justify-between gap-4">
         <span
-          className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${
             selected ? "bg-mind-blob text-white" : "bg-mind-surface2 text-mind-blob"
           }`}
         >
-          <Icon size={22} />
+          <Icon size={19} />
         </span>
         <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-mind-muted">
           {selected ? text(siteText.cards.selected, locale) : text(siteText.cards.route, locale)}
         </span>
       </div>
 
-      <h3 className="mt-7 font-display text-4xl uppercase leading-none text-mind-ink">{name}</h3>
+      <h3 className="mt-5 font-display text-3xl uppercase leading-none text-mind-ink">{name}</h3>
 
-      <p className="mt-4 text-sm font-light leading-6 text-mind-muted">{text(industry.subtitle, locale)}</p>
+      <p className="mt-3 text-sm font-light leading-6 text-mind-muted">{text(industry.subtitle, locale)}</p>
 
       {industry.tags.length ? (
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           {industry.tags.map((tag) => (
             <span
               key={text(tag, "en")}

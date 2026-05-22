@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -11,6 +11,8 @@ import { industries } from "@/data/industries";
 import { captureEvent } from "@/lib/analytics";
 import type { Locale } from "@/types/content";
 
+const LOCALE_STORAGE_KEY = "atlas_locale";
+
 export function AtlasExperience() {
   const [locale, setLocale] = useState<Locale>("en");
   const [selectedIndustryId, setSelectedIndustryId] = useState("real-estate");
@@ -18,14 +20,24 @@ export function AtlasExperience() {
   const selectedIndustry =
     industries.find((industry) => industry.id === selectedIndustryId) ?? industries[0];
 
+  useEffect(() => {
+    const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+
+    if (savedLocale === "en" || savedLocale === "pt") {
+      setLocale(savedLocale);
+    }
+  }, []);
+
   function handleLocaleChange(nextLocale: Locale) {
     if (nextLocale !== locale) {
       captureEvent("language_changed", {
-        locale: nextLocale
+        locale: nextLocale,
+        surface: "map"
       });
     }
 
     setLocale(nextLocale);
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
   }
 
   function handleSelectIndustry(id: string) {

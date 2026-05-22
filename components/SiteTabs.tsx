@@ -2,20 +2,23 @@
 
 import { advisoryText } from "@/data/advisory";
 import { captureEvent } from "@/lib/analytics";
+import { text } from "@/lib/localize";
+import type { Locale } from "@/types/content";
 
 type SiteTab = "advisory" | "map";
 
 type SiteTabsProps = {
   active: SiteTab;
+  locale: Locale;
   className?: string;
 };
 
-const tabs: Array<{ id: SiteTab; label: string; href: string }> = [
+const tabs: Array<{ id: SiteTab; label: typeof advisoryText.tabs.advisory; href: string }> = [
   { id: "advisory", label: advisoryText.tabs.advisory, href: "/" },
   { id: "map", label: advisoryText.tabs.map, href: "/map/" }
 ];
 
-export function SiteTabs({ active, className = "" }: SiteTabsProps) {
+export function SiteTabs({ active, locale, className = "" }: SiteTabsProps) {
   return (
     <div
       className={`inline-flex rounded-full border border-[var(--color-rule)] bg-mind-surface2 p-1 shadow-mindSm ${className}`}
@@ -40,7 +43,7 @@ export function SiteTabs({ active, className = "" }: SiteTabsProps) {
                 : "text-mind-muted hover:text-mind-ink"
             }`}
           >
-            {tab.label}
+            {text(tab.label, locale)}
           </a>
         );
       })}

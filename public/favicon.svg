@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Atlas AI">
+  <defs>
+    <linearGradient id="gel" x1="15" x2="51" y1="6" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eee9ff"/>
+      <stop offset="0.22" stop-color="#cbbbff"/>
+      <stop offset="0.58" stop-color="#9a7cf0"/>
+      <stop offset="1" stop-color="#5b3eb7"/>
+    </linearGradient>
+    <radialGradient id="shineMain" cx="31%" cy="24%" r="65%">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.92"/>
+      <stop offset="0.22" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="0.55" stop-color="#fff" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shineLeg" cx="62%" cy="66%" r="45%">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.52"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softLift" x="-18%" y="-18%" width="136%" height="140%">
+      <feDropShadow dx="0" dy="3.5" stdDeviation="2.8" flood-color="#1d1640" flood-opacity="0.28"/>
+    </filter>
+    <mask id="aHole">
+      <rect width="64" height="64" fill="#fff"/>
+      <path d="M31.9 25.7c-4.6 0-8.3 3.8-8.3 8.4 0 4.7 3.7 8.4 8.3 8.4s8.3-3.7 8.3-8.4c0-4.6-3.7-8.4-8.3-8.4Z" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#f6f3ff"/>
+  <g filter="url(#softLift)" mask="url(#aHole)">
+    <path
+      d="M31.7 6.2c5.4 0 9.8 4.5 9.8 10 0 2.7-1.1 5.2-2.8 7 6.7.5 12.1 6.8 12.1 14.5 0 8.1-5.7 14.8-12.7 14.8-3 0-5.8-1.2-8-3.1-2.2 4.9-6.3 8.1-11 8.1-6.9 0-12.5-6.8-12.5-15.2 0-6.5 3.4-12 8.2-14.2 2.3-1.1 4.2-2.8 5.4-5.1l3.2-6.4c1.7-6.1 4.2-10.4 8.3-10.4Z"
+      fill="url(#gel)"
+    />
+    <path
+      d="M31.7 6.2c5.4 0 9.8 4.5 9.8 10 0 2.7-1.1 5.2-2.8 7 6.7.5 12.1 6.8 12.1 14.5 0 8.1-5.7 14.8-12.7 14.8-3 0-5.8-1.2-8-3.1-2.2 4.9-6.3 8.1-11 8.1-6.9 0-12.5-6.8-12.5-15.2 0-6.5 3.4-12 8.2-14.2 2.3-1.1 4.2-2.8 5.4-5.1l3.2-6.4c1.7-6.1 4.2-10.4 8.3-10.4Z"
+      fill="url(#shineMain)"
+    />
+    <path
+      d="M38.7 23.2c6.7.5 12.1 6.8 12.1 14.5 0 8.1-5.7 14.8-12.7 14.8-3 0-5.8-1.2-8-3.1 4.7-5.2 6.6-16.1 8.6-26.2Z"
+      fill="url(#shineLeg)"
+    />
+  </g>
+  <circle cx="22" cy="45" r="1.85" fill="#fff" opacity="0.86"/>
+  <circle cx="45" cy="42" r="1.65" fill="#fff" opacity="0.82"/>
+  <ellipse cx="29" cy="15" rx="6.7" ry="3" fill="#fff" opacity="0.36" transform="rotate(-23 29 15)"/>
+</svg>

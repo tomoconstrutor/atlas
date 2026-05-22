@@ -25,7 +25,7 @@ export function Header({ locale, onLocaleChange }: HeaderProps) {
           AI ATLAS<span className="text-mind-blob">.</span>
         </a>
 
-        <SiteTabs active="map" className="order-3 w-full justify-center sm:order-none sm:w-auto" />
+        <SiteTabs active="map" locale={locale} className="order-3 w-full justify-center sm:order-none sm:w-auto" />
 
         <div className="hidden items-center gap-7 lg:flex">
           <a className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted transition hover:text-mind-ink" href="#industries">

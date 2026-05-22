@@ -8,7 +8,9 @@ import { SplitFlapCounter } from "@/components/SplitFlapCounter";
 import { advisoryText } from "@/data/advisory";
 import { captureEvent } from "@/lib/analytics";
 import { captureAdvisoryLead } from "@/lib/leadCapture";
+import { text } from "@/lib/localize";
 import { isValidEmail } from "@/lib/reportKit";
+import type { Locale } from "@/types/content";
 
 type AdvisoryFormState = {
   name: string;
@@ -16,6 +18,8 @@ type AdvisoryFormState = {
   role: string;
   leverageGoal: string;
 };
+
+const LOCALE_STORAGE_KEY = "atlas_locale";
 
 function getReleasedCount() {
   const now = new Date();
@@ -87,9 +91,11 @@ function useReleasedCounter() {
 }
 
 function CounterModule({
-  releasedValue
+  releasedValue,
+  locale
 }: {
   releasedValue: number;
+  locale: Locale;
 }) {
   const counters = advisoryText.counters;
 
@@ -98,8 +104,8 @@ function CounterModule({
       <SplitFlapCounter
         value={releasedValue}
         minDigits={3}
-        label={counters.releasedLabel}
-        sublabel={counters.releasedSublabel}
+        label={text(counters.releasedLabel, locale)}
+        sublabel={text(counters.releasedSublabel, locale)}
       />
 
       <div className="relative my-5 overflow-hidden rounded-lg border border-[var(--color-rule)] bg-mind-ink p-5 text-mind-bg sm:my-6 sm:p-6">
@@ -118,7 +124,7 @@ function CounterModule({
             </span>
           </div>
           <p className="mt-5 max-w-[18rem] text-sm font-light leading-6 text-[rgba(234,234,242,0.72)]">
-            Reads the flood, rejects the generic, and keeps only the leverage signal.
+            {text(counters.filterBody, locale)}
           </p>
         </div>
 
@@ -128,8 +134,8 @@ function CounterModule({
 
         <SplitFlapCounter
           value={counters.relevant}
-          label={counters.relevantLabel}
-          sublabel={counters.relevantSublabel}
+          label={text(counters.relevantLabel, locale)}
+          sublabel={text(counters.relevantSublabel, locale)}
           size="small"
           quiet
         />
@@ -140,6 +146,7 @@ function CounterModule({
 
 export function AdvisoryExperience() {
   const releasedValue = useReleasedCounter();
+  const [locale, setLocale] = useState<Locale>("en");
   const [form, setForm] = useState<AdvisoryFormState>({
     name: "",
     email: "",
@@ -151,6 +158,28 @@ export function AdvisoryExperience() {
   const [submitting, setSubmitting] = useState(false);
 
   const leveragePoints = useMemo(() => advisoryText.leveragePoints, []);
+
+  useEffect(() => {
+    const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+
+    if (savedLocale === "en" || savedLocale === "pt") {
+      setLocale(savedLocale);
+    }
+  }, []);
+
+  function handleLocaleChange(nextLocale: Locale) {
+    if (nextLocale !== locale) {
+      captureEvent("language_changed", {
+        locale: nextLocale,
+        surface: "advisory"
+      });
+    }
+
+    setLocale(nextLocale);
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    setError("");
+    setSuccess(false);
+  }
 
   function updateForm(field: keyof AdvisoryFormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -170,7 +199,7 @@ export function AdvisoryExperience() {
     });
 
     if (!email || !isValidEmail(email)) {
-      setError(advisoryText.form.invalidEmail);
+      setError(text(advisoryText.form.invalidEmail, locale));
       return;
     }
 
@@ -189,8 +218,8 @@ export function AdvisoryExperience() {
       if (!result.ok) {
         setError(
           result.reason === "missing_config"
-            ? advisoryText.form.missingConfig
-            : advisoryText.form.failed
+            ? text(advisoryText.form.missingConfig, locale)
+            : text(advisoryText.form.failed, locale)
         );
         return;
       }
@@ -208,7 +237,7 @@ export function AdvisoryExperience() {
         leverageGoal: ""
       });
     } catch {
-      setError(advisoryText.form.failed);
+      setError(text(advisoryText.form.failed, locale));
     } finally {
       setSubmitting(false);
     }
@@ -225,7 +254,25 @@ export function AdvisoryExperience() {
           >
             AI ATLAS<span className="text-mind-blob">.</span>
           </a>
-          <SiteTabs active="advisory" className="order-3 w-full justify-center sm:order-none sm:w-auto" />
+          <SiteTabs active="advisory" locale={locale} className="order-3 w-full justify-center sm:order-none sm:w-auto" />
+
+          <div className="flex rounded-full border border-[var(--color-rule)] bg-mind-surface2 p-1 shadow-mindSm" aria-label="Language">
+            {(["en", "pt"] as const).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => handleLocaleChange(item)}
+                className={`min-h-9 min-w-10 rounded-full px-3 text-[11px] font-medium uppercase tracking-[0.14em] transition ${
+                  locale === item
+                    ? "bg-mind-ink text-mind-bg"
+                    : "text-mind-muted hover:text-mind-ink"
+                }`}
+                aria-pressed={locale === item}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </nav>
       </header>
 
@@ -237,15 +284,15 @@ export function AdvisoryExperience() {
             <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-[var(--color-rule)] bg-mind-surface2 px-4 py-2 shadow-mindSm">
               <Filter size={15} className="text-mind-blob-deep" />
               <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted">
-                {advisoryText.hero.eyebrow}
+                {text(advisoryText.hero.eyebrow, locale)}
               </span>
             </div>
 
             <h1 className="max-w-3xl font-display text-[clamp(54px,9vw,104px)] uppercase leading-[0.88] text-mind-ink">
-              {advisoryText.hero.headline}
+              {text(advisoryText.hero.headline, locale)}
             </h1>
             <p className="mt-5 max-w-xl text-base font-light leading-7 text-mind-muted">
-              {advisoryText.hero.subheadline}
+              {text(advisoryText.hero.subheadline, locale)}
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -259,7 +306,7 @@ export function AdvisoryExperience() {
                 className="inline-flex min-h-11 items-center gap-2 rounded-full bg-mind-ink px-6 pb-1.5 pt-2 font-display text-lg uppercase tracking-[0.04em] text-mind-bg transition hover:scale-[1.03] hover:shadow-mindMd"
               >
                 <Mail size={17} />
-                {advisoryText.hero.primaryCta}
+                {text(advisoryText.hero.primaryCta, locale)}
               </a>
               <a
                 href="/map/"
@@ -271,23 +318,23 @@ export function AdvisoryExperience() {
                 }
                 className="inline-flex min-h-11 items-center gap-2 rounded-full border-[1.5px] border-mind-ink px-6 pb-1.5 pt-2 font-display text-lg uppercase tracking-[0.04em] text-mind-ink transition hover:scale-[1.03] hover:bg-mind-ink hover:text-mind-bg"
               >
-                {advisoryText.hero.secondaryCta}
+                {text(advisoryText.hero.secondaryCta, locale)}
                 <ArrowRight size={17} />
               </a>
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:max-w-2xl">
               {leveragePoints.map((point) => (
-                <div key={point.label} className="rounded-lg border border-[var(--color-rule)] bg-mind-surface2 p-4 shadow-mindSm">
+                <div key={point.label.en} className="rounded-lg border border-[var(--color-rule)] bg-mind-surface2 p-4 shadow-mindSm">
                   <div className="flex items-center gap-2">
                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-mind-blob-pale text-mind-blob-deep">
                       <Check size={13} />
                     </span>
                     <h2 className="font-display text-2xl uppercase leading-none text-mind-ink">
-                      {point.label}
+                      {text(point.label, locale)}
                     </h2>
                   </div>
-                  <p className="mt-3 text-sm font-light leading-6 text-mind-muted">{point.body}</p>
+                  <p className="mt-3 text-sm font-light leading-6 text-mind-muted">{text(point.body, locale)}</p>
                 </div>
               ))}
             </div>
@@ -295,7 +342,7 @@ export function AdvisoryExperience() {
 
           <div className="relative lg:min-h-[650px]">
             <div className="grid gap-4 lg:absolute lg:right-0 lg:top-0 lg:w-[min(100%,34rem)]">
-              <CounterModule releasedValue={releasedValue} />
+              <CounterModule releasedValue={releasedValue} locale={locale} />
             </div>
           </div>
         </div>
@@ -305,13 +352,13 @@ export function AdvisoryExperience() {
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-start">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-mind-blob-deep">
-              {advisoryText.form.eyebrow}
+              {text(advisoryText.form.eyebrow, locale)}
             </p>
             <h2 className="mt-2 max-w-xl font-display text-[clamp(40px,6vw,68px)] uppercase leading-[0.92] text-mind-ink">
-              {advisoryText.form.title}
+              {text(advisoryText.form.title, locale)}
             </h2>
             <p className="mt-4 max-w-lg text-sm font-light leading-6 text-mind-muted">
-              {advisoryText.form.body}
+              {text(advisoryText.form.body, locale)}
             </p>
           </div>
 
@@ -319,20 +366,20 @@ export function AdvisoryExperience() {
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted">
-                  {advisoryText.form.nameLabel}
+                  {text(advisoryText.form.nameLabel, locale)}
                 </span>
                 <input
                   value={form.name}
                   onChange={(event) => updateForm("name", event.target.value)}
                   disabled={submitting}
-                  placeholder={advisoryText.form.namePlaceholder}
+                  placeholder={text(advisoryText.form.namePlaceholder, locale)}
                   className="mt-2 min-h-12 w-full rounded-lg border border-[var(--color-rule)] bg-mind-surface px-4 text-sm font-light text-mind-ink outline-none placeholder:text-mind-muted focus:border-mind-blob"
                 />
               </label>
 
               <label className="block">
                 <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted">
-                  {advisoryText.form.emailLabel}
+                  {text(advisoryText.form.emailLabel, locale)}
                 </span>
                 <input
                   value={form.email}
@@ -340,7 +387,7 @@ export function AdvisoryExperience() {
                   type="email"
                   inputMode="email"
                   disabled={submitting}
-                  placeholder={advisoryText.form.emailPlaceholder}
+                  placeholder={text(advisoryText.form.emailPlaceholder, locale)}
                   className="mt-2 min-h-12 w-full rounded-lg border border-[var(--color-rule)] bg-mind-surface px-4 text-sm font-light text-mind-ink outline-none placeholder:text-mind-muted focus:border-mind-blob"
                 />
               </label>
@@ -348,26 +395,26 @@ export function AdvisoryExperience() {
 
             <label className="mt-4 block">
               <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted">
-                {advisoryText.form.roleLabel}
+                {text(advisoryText.form.roleLabel, locale)}
               </span>
               <input
                 value={form.role}
                 onChange={(event) => updateForm("role", event.target.value)}
                 disabled={submitting}
-                placeholder={advisoryText.form.rolePlaceholder}
+                placeholder={text(advisoryText.form.rolePlaceholder, locale)}
                 className="mt-2 min-h-12 w-full rounded-lg border border-[var(--color-rule)] bg-mind-surface px-4 text-sm font-light text-mind-ink outline-none placeholder:text-mind-muted focus:border-mind-blob"
               />
             </label>
 
             <label className="mt-4 block">
               <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-mind-muted">
-                {advisoryText.form.goalLabel}
+                {text(advisoryText.form.goalLabel, locale)}
               </span>
               <textarea
                 value={form.leverageGoal}
                 onChange={(event) => updateForm("leverageGoal", event.target.value)}
                 disabled={submitting}
-                placeholder={advisoryText.form.goalPlaceholder}
+                placeholder={text(advisoryText.form.goalPlaceholder, locale)}
                 rows={4}
                 className="mt-2 w-full resize-none rounded-lg border border-[var(--color-rule)] bg-mind-surface px-4 py-3 text-sm font-light leading-6 text-mind-ink outline-none placeholder:text-mind-muted focus:border-mind-blob"
               />
@@ -377,7 +424,7 @@ export function AdvisoryExperience() {
               <p className="mt-4 text-sm font-light leading-6 text-mind-blob-deep">{error}</p>
             ) : success ? (
               <p className="mt-4 text-sm font-light leading-6 text-mind-blob-deep">
-                {advisoryText.form.success}
+                {text(advisoryText.form.success, locale)}
               </p>
             ) : null}
 
@@ -387,7 +434,7 @@ export function AdvisoryExperience() {
               className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-mind-ink px-6 pb-2 pt-2.5 font-display text-xl uppercase tracking-[0.04em] text-mind-bg transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70"
             >
               <Mail size={18} />
-              {submitting ? advisoryText.form.submitting : advisoryText.form.button}
+              {submitting ? text(advisoryText.form.submitting, locale) : text(advisoryText.form.button, locale)}
             </button>
           </form>
         </div>

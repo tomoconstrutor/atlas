@@ -5,7 +5,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI Atlas | AI Advisory",
-  description: "AI Atlas filters AI noise into the few moves that matter for personal leverage."
+  description: "AI Atlas filters AI noise into the few moves that matter for personal leverage.",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg"
+  }
 };
 
 export default function RootLayout({

@@ -138,7 +138,7 @@ export const siteText = {
       "Nao conseguimos guardar o email. Tenta novamente."
     ),
     filenameNote: t("Add an email to download the report as a PDF.", "Adiciona um email para descarregar o relatorio em PDF."),
-    emailNote: t("We will save the lead in Supabase, then start the download.", "Vamos guardar a lead no Supabase e depois iniciar o download.")
+    emailNote: t("We will save the request, then start the download.", "Vamos guardar o pedido e depois iniciar o download.")
   },
   cta: {
     headline: t("Custom AI Map", "Mapa AI personalizado"),

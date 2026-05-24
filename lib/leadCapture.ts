@@ -1,8 +1,8 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/types/content";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const FORMSPREE_ENDPOINT_BASE = "https://formspree.io/f";
+const FORMSPREE_MAP_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_MAP_FORM_ID;
+const FORMSPREE_ADVISORY_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_ADVISORY_FORM_ID;
 
 type ReportLeadInput = {
   email: string;
@@ -31,67 +31,69 @@ type CaptureAdvisoryLeadResult =
   | { ok: true }
   | { ok: false; reason: "missing_config" | "insert_failed"; message?: string };
 
-let supabaseClient: SupabaseClient | null = null;
+type CaptureLeadResult = CaptureReportLeadResult | CaptureAdvisoryLeadResult;
+type FormspreePayload = Record<string, string | null | undefined>;
 
-function getSupabaseClient() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    return null;
-  }
-
-  supabaseClient ??= createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-      persistSession: false
-    }
-  });
-
-  return supabaseClient;
-}
-
-export async function captureReportLead(input: ReportLeadInput): Promise<CaptureReportLeadResult> {
-  const supabase = getSupabaseClient();
-
-  if (!supabase) {
+async function submitToFormspree(formId: string | undefined, payload: FormspreePayload): Promise<CaptureLeadResult> {
+  if (!formId) {
     return { ok: false, reason: "missing_config" };
   }
 
-  const { error } = await supabase.from("report_leads").insert({
+  try {
+    const response = await fetch(`${FORMSPREE_ENDPOINT_BASE}/${encodeURIComponent(formId)}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      return { ok: false, reason: "insert_failed", message: await readFormspreeError(response) };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      reason: "insert_failed",
+      message: error instanceof Error ? error.message : undefined
+    };
+  }
+}
+
+async function readFormspreeError(response: Response) {
+  try {
+    const body = (await response.json()) as { errors?: Array<{ message?: string }>; error?: string };
+    const firstError = body.errors?.find((item) => item.message)?.message;
+
+    return firstError ?? body.error ?? response.statusText;
+  } catch {
+    return response.statusText;
+  }
+}
+
+export async function captureReportLead(input: ReportLeadInput): Promise<CaptureReportLeadResult> {
+  return submitToFormspree(FORMSPREE_MAP_FORM_ID, {
     email: input.email,
+    message: `AI Map report requested for ${input.industryName}.`,
     industry_id: input.industryId,
     industry_name: input.industryName,
     locale: input.locale,
     report_filename: input.reportFilename,
-    page_url: input.pageUrl ?? null,
-    user_agent: input.userAgent ?? null
+    page_url: input.pageUrl,
+    user_agent: input.userAgent
   });
-
-  if (error) {
-    return { ok: false, reason: "insert_failed", message: error.message };
-  }
-
-  return { ok: true };
 }
 
 export async function captureAdvisoryLead(input: AdvisoryLeadInput): Promise<CaptureAdvisoryLeadResult> {
-  const supabase = getSupabaseClient();
-
-  if (!supabase) {
-    return { ok: false, reason: "missing_config" };
-  }
-
-  const { error } = await supabase.from("advisory_leads").insert({
+  return submitToFormspree(FORMSPREE_ADVISORY_FORM_ID, {
     email: input.email,
-    name: input.name || null,
-    role: input.role || null,
-    leverage_goal: input.leverageGoal || null,
-    page_url: input.pageUrl ?? null,
-    user_agent: input.userAgent ?? null
+    name: input.name,
+    role: input.role,
+    message: input.leverageGoal,
+    page_url: input.pageUrl,
+    user_agent: input.userAgent
   });
-
-  if (error) {
-    return { ok: false, reason: "insert_failed", message: error.message };
-  }
-
-  return { ok: true };
 }

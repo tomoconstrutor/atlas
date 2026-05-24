@@ -35,6 +35,9 @@ jobs:
         run: npm ci
 
       - name: Build static site
+        env:
+          NEXT_PUBLIC_FORMSPREE_MAP_FORM_ID: xvzyrrwb
+          NEXT_PUBLIC_FORMSPREE_ADVISORY_FORM_ID: mjgzrraz
         run: npm run build
 
       - name: Upload Pages artifact

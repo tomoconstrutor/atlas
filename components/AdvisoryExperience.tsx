@@ -369,6 +369,7 @@ export function AdvisoryExperience() {
                   {text(advisoryText.form.nameLabel, locale)}
                 </span>
                 <input
+                  name="name"
                   value={form.name}
                   onChange={(event) => updateForm("name", event.target.value)}
                   disabled={submitting}
@@ -382,6 +383,7 @@ export function AdvisoryExperience() {
                   {text(advisoryText.form.emailLabel, locale)}
                 </span>
                 <input
+                  name="email"
                   value={form.email}
                   onChange={(event) => updateForm("email", event.target.value)}
                   type="email"
@@ -398,6 +400,7 @@ export function AdvisoryExperience() {
                 {text(advisoryText.form.roleLabel, locale)}
               </span>
               <input
+                name="role"
                 value={form.role}
                 onChange={(event) => updateForm("role", event.target.value)}
                 disabled={submitting}
@@ -411,6 +414,7 @@ export function AdvisoryExperience() {
                 {text(advisoryText.form.goalLabel, locale)}
               </span>
               <textarea
+                name="message"
                 value={form.leverageGoal}
                 onChange={(event) => updateForm("leverageGoal", event.target.value)}
                 disabled={submitting}

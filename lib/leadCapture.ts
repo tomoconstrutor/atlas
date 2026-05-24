@@ -40,13 +40,13 @@ async function submitToFormspree(formId: string | undefined, payload: FormspreeP
   }
 
   try {
+    const formData = buildFormspreeFormData(payload);
     const response = await fetch(`${FORMSPREE_ENDPOINT_BASE}/${encodeURIComponent(formId)}`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: "application/json"
       },
-      body: JSON.stringify(payload)
+      body: formData
     });
 
     if (!response.ok) {
@@ -61,6 +61,18 @@ async function submitToFormspree(formId: string | undefined, payload: FormspreeP
       message: error instanceof Error ? error.message : undefined
     };
   }
+}
+
+function buildFormspreeFormData(payload: FormspreePayload) {
+  const formData = new FormData();
+
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      formData.append(key, value);
+    }
+  });
+
+  return formData;
 }
 
 async function readFormspreeError(response: Response) {

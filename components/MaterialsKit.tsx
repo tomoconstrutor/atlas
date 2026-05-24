@@ -156,6 +156,7 @@ export function MaterialsKit({ industry, locale, onExploreAnotherIndustry }: Mat
                   setCaptured(false);
                 }}
                 type="email"
+                name="email"
                 inputMode="email"
                 disabled={preparing}
                 placeholder={text(siteText.materials.emailPlaceholder, locale)}

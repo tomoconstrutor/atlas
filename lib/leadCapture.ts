@@ -1,8 +1,8 @@
 import type { Locale } from "@/types/content";
 
 const FORMSPREE_ENDPOINT_BASE = "https://formspree.io/f";
-const FORMSPREE_MAP_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_MAP_FORM_ID;
-const FORMSPREE_ADVISORY_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_ADVISORY_FORM_ID;
+const FORMSPREE_MAP_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_MAP_FORM_ID ?? "xvzyrrwb";
+const FORMSPREE_ADVISORY_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_ADVISORY_FORM_ID ?? "mjgzrraz";
 
 type ReportLeadInput = {
   email: string;

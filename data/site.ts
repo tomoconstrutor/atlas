@@ -13,14 +13,14 @@ export const siteText = {
     cta: t("Get My AI Map", "Pedir AI Map")
   },
   hero: {
-    eyebrow: t("Practical AI for operators", "AI pratica para operadores"),
+    eyebrow: t("Practical AI for operators", "AI prática para operadores"),
     headline: t(
       "Most companies do not need more AI. They need less busywork.",
-      "A maioria das empresas nao precisa de mais AI. Precisa de menos trabalho chato."
+      "A maioria das empresas não precisa de mais AI. Precisa de menos trabalho chato."
     ),
     subheadline: t(
       "A short map of where AI already helps by industry: classifying requests, summarizing information, personalizing responses, and removing manual work. No hype. No jargon.",
-      "Um mapa curto de onde a AI ja ajuda por setor: classificar pedidos, resumir informacao, personalizar respostas e tirar trabalho manual da frente. Sem hype. Sem jargao."
+      "Um mapa curto de onde a AI já ajuda por setor: classificar pedidos, resumir informação, personalizar respostas e tirar trabalho manual da frente. Sem hype. Sem jargão."
     ),
     primaryCta: t("Explore use cases", "Explorar casos"),
     secondaryCta: t("Request custom map", "Pedir mapa"),
@@ -36,13 +36,13 @@ export const siteText = {
       t("Choose the operating context", "Escolhe o contexto operacional"),
       t("Find repeated work", "Encontra trabalho repetido"),
       t("Classify, summarize, draft, route", "Classificar, resumir, rascunhar, encaminhar"),
-      t("Less drag, faster response", "Menos friccao, resposta mais rapida")
+      t("Less drag, faster response", "Menos fricção, resposta mais rápida")
     ]
   },
   context: {
     body: t(
       "Think less about chatbots. Think about classification, summaries, first drafts, routing, and useful context.",
-      "Pensa menos em chatbots. Pensa mais em classificacao, resumo, primeira versao, routing e contexto util."
+      "Pensa menos em chatbots. Pensa mais em classificação, resumo, primeira versão, routing e contexto útil."
     ),
     pills: [
       t("Save time", "Poupar tempo"),
@@ -54,7 +54,7 @@ export const siteText = {
   sections: {
     industries: t("Industry explorer", "Explorador de setores"),
     detail: t("Selected route", "Rota selecionada"),
-    materials: t("Exportable kit", "Kit exportavel"),
+    materials: t("Exportable kit", "Kit exportável"),
     opportunities: t("Universal opportunities", "Oportunidades universais"),
     howItWorks: t("How it works", "Como funciona"),
     cta: t("Custom map", "Mapa personalizado")
@@ -63,15 +63,15 @@ export const siteText = {
     titlePrefix: t("AI /", "AI /"),
     timeLeaks: t("Where time usually disappears", "Onde o tempo desaparece"),
     useCases: t("Opportunity points", "Pontos de oportunidade"),
-    quickWins: t("Quick wins", "Ganhos rapidos"),
-    workflows: t("Practical workflows", "Workflows praticos"),
+    quickWins: t("Quick wins", "Ganhos rápidos"),
+    workflows: t("Practical workflows", "Workflows práticos"),
     miniTools: t("Mini-tools", "Mini-tools"),
     prompts: t("Prompt cards", "Prompts"),
     firstWorkflow: t("First workflow", "Primeiro workflow"),
     buildNext: t("Build next", "Programar a seguir"),
     copyPrompt: t("Copy prompt", "Copiar prompt"),
     copied: t("Copied", "Copiado"),
-    implementation: t("Implementation", "Implementacao"),
+    implementation: t("Implementation", "Implementação"),
     input: t("Input", "Input"),
     output: t("Output", "Output")
   },
@@ -87,34 +87,34 @@ export const siteText = {
     step: t("Step", "Passo"),
     steps: [
       {
-        title: t("Start with repeated work", "Comeca pelo trabalho repetido"),
+        title: t("Start with repeated work", "Começa pelo trabalho repetido"),
         body: t(
           "The first wins are usually boring: classifying, summarizing, preparing a draft, and routing the next action.",
-          "Os primeiros ganhos costumam ser aborrecidos: classificar, resumir, preparar um rascunho e encaminhar a proxima acao."
+          "Os primeiros ganhos costumam ser aborrecidos: classificar, resumir, preparar um rascunho e encaminhar a próxima ação."
         )
       },
       {
         title: t("Structure the output", "Estrutura o output"),
         body: t(
           "Useful AI work has a shape: fields, priorities, missing information, recommended next step, and a clear owner.",
-          "Trabalho util com AI tem forma: campos, prioridades, informacao em falta, proxima acao recomendada e responsavel claro."
+          "Trabalho útil com AI tem forma: campos, prioridades, informação em falta, próxima ação recomendada e responsável claro."
         )
       },
       {
-        title: t("Keep human control", "Mantem controlo humano"),
+        title: t("Keep human control", "Mantém controlo humano"),
         body: t(
           "AI can prepare, suggest, and accelerate. Sensitive decisions still need a responsible person in the loop.",
-          "AI pode preparar, sugerir e acelerar. Decisoes sensiveis continuam a precisar de uma pessoa responsavel no loop."
+          "AI pode preparar, sugerir e acelerar. Decisões sensíveis continuam a precisar de uma pessoa responsável no loop."
         )
       }
     ]
   },
   materials: {
     eyebrow: t("Ready-to-send asset", "Asset pronto a enviar"),
-    headline: t("Export the selected report", "Exporta o relatorio do setor selecionado"),
+    headline: t("Export the selected report", "Exporta o relatório do setor selecionado"),
     body: t(
       "A polished MIND-style report with workflows, prompts, mini-tools, and outreach copy for the industry currently open.",
-      "Um relatorio polido em estilo MIND com workflows, prompts, mini-tools e copy de outreach para o setor aberto."
+      "Um relatório polido em estilo MIND com workflows, prompts, mini-tools e copy de outreach para o setor aberto."
     ),
     previewTitle: t("Included", "Inclui"),
     previewItems: [
@@ -126,18 +126,18 @@ export const siteText = {
     emailLabel: t("Email", "Email"),
     emailPlaceholder: t("name@company.com", "nome@empresa.com"),
     downloadButton: t("Download PDF", "Download PDF"),
-    invalidEmail: t("Enter a valid email to download the PDF.", "Usa um email valido para fazer download do PDF."),
+    invalidEmail: t("Enter a valid email to download the PDF.", "Usa um email válido para fazer download do PDF."),
     preparing: t("Preparing PDF", "A preparar PDF"),
-    captured: t("Email added. Your PDF download has started.", "Email adicionado. O download do PDF ja comecou."),
+    captured: t("Email added. Your PDF download has started.", "Email adicionado. O download do PDF já começou."),
     captureUnavailable: t(
       "Lead capture is not configured yet, so the download cannot start.",
-      "A captura de leads ainda nao esta configurada, por isso o download nao pode comecar."
+      "A captura de leads ainda não está configurada, por isso o download não pode começar."
     ),
     captureFailed: t(
       "We could not save the email. Please try again.",
-      "Nao conseguimos guardar o email. Tenta novamente."
+      "Não conseguimos guardar o email. Tenta novamente."
     ),
-    filenameNote: t("Add an email to download the report as a PDF.", "Adiciona um email para descarregar o relatorio em PDF."),
+    filenameNote: t("Add an email to download the report as a PDF.", "Adiciona um email para descarregar o relatório em PDF."),
     emailNote: t("We will save the request, then start the download.", "Vamos guardar o pedido e depois iniciar o download.")
   },
   cta: {
@@ -147,7 +147,7 @@ export const siteText = {
       "Diz-me o setor, o tamanho da equipa e duas tarefas que vos roubam tempo. Devolvo 3 workflows de AI que fazem sentido."
     ),
     button: t("Request my AI map", "Pedir o meu AI map"),
-    disabledHint: t("Contact email not configured yet", "Email ainda nao configurado")
+    disabledHint: t("Contact email not configured yet", "Email ainda não configurado")
   },
   footer: {
     line: t(

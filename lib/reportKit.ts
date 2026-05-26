@@ -91,22 +91,22 @@ const reportCopy = {
     }
   },
   pt: {
-    titleSuffix: "Relatorio de Oportunidades AI",
+    titleSuffix: "Relatório de Oportunidades AI",
     generatedLabel: "Report kit",
     intro:
-      "Um briefing operacional compacto para os primeiros workflows uteis de AI: onde o tempo desaparece, o que testar primeiro e copy pronta para outreach.",
+      "Um briefing operacional compacto para os primeiros workflows úteis de AI: onde o tempo desaparece, o que testar primeiro e copy pronta para outreach.",
     emailIntro:
-      "Preparei um relatorio compacto do AI Atlas para este setor. O PDF esta pronto na pagina, e a nota abaixo deixa o resumo util.",
+      "Preparei um relatório compacto do AI Atlas para este setor. O PDF está pronto na página, e a nota abaixo deixa o resumo útil.",
     problemHeading: "Principais fugas de tempo",
-    workflowHeading: "Workflows praticos",
+    workflowHeading: "Workflows práticos",
     toolHeading: "Mini-tools",
     promptHeading: "Prompts",
     firstWorkflowHeading: "Primeiro workflow a testar",
     outreachHeading: "Copy de outreach",
-    downloadName: "relatorio",
+    downloadName: "relatório",
     labels: {
       coverKicker: "Report kit",
-      contents: "Conteudos",
+      contents: "Conteúdos",
       opportunityFrame: "Mapa de oportunidade",
       timeLeaks: "Fugas de tempo",
       workflows: "Workflows",
@@ -114,11 +114,11 @@ const reportCopy = {
       prompts: "Prompts",
       outreach: "Outreach",
       firstWorkflow: "Primeiro workflow",
-      section01: "Seccao 01",
+      section01: "Secção 01",
       followUp: "Follow-up",
       preparedBy: "Preparado por",
-      version: "Versao",
-      footer: "AI Atlas / Relatorio exportavel"
+      version: "Versão",
+      footer: "AI Atlas / Relatório exportável"
     }
   }
 };
@@ -174,7 +174,7 @@ export function buildReportFilename(report: ReportKit) {
 
 export function buildReportEmailSubject(report: ReportKit) {
   return report.locale === "pt"
-    ? `AI Atlas: relatorio para ${report.industryName}`
+    ? `AI Atlas: relatório para ${report.industryName}`
     : `AI Atlas: report for ${report.industryName}`;
 }
 

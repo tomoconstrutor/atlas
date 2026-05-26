@@ -20,6 +20,42 @@ type AdvisoryFormState = {
 };
 
 const LOCALE_STORAGE_KEY = "atlas_locale";
+const RELEASED_COUNTER_STORAGE_PREFIX = "atlas_released_counter";
+
+function getReleasedCounterStorageKey() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${RELEASED_COUNTER_STORAGE_PREFIX}_${year}-${month}-${day}`;
+}
+
+function readStoredReleasedCount() {
+  try {
+    const storedValue = window.localStorage.getItem(getReleasedCounterStorageKey());
+    const parsedValue = storedValue ? Number.parseInt(storedValue, 10) : Number.NaN;
+
+    if (!Number.isFinite(parsedValue)) {
+      return 0;
+    }
+
+    return Math.min(advisoryText.counters.releasedCap, Math.max(0, parsedValue));
+  } catch {
+    return 0;
+  }
+}
+
+function storeReleasedCount(value: number) {
+  try {
+    window.localStorage.setItem(
+      getReleasedCounterStorageKey(),
+      String(Math.min(advisoryText.counters.releasedCap, Math.max(0, value)))
+    );
+  } catch {
+    // Storage can be unavailable in private modes. The counter still works for the session.
+  }
+}
 
 function getReleasedCount() {
   const now = new Date();
@@ -50,10 +86,24 @@ function useReleasedCounter() {
   const [value, setValue] = useState(advisoryText.counters.releasedMin);
 
   useEffect(() => {
-    setValue(getReleasedCount());
+    setValue(() => {
+      const nextValue = Math.max(getReleasedCount(), readStoredReleasedCount());
+
+      storeReleasedCount(nextValue);
+      return nextValue;
+    });
 
     const syncInterval = window.setInterval(() => {
-      setValue((currentValue) => Math.max(currentValue, getReleasedCount()));
+      setValue((currentValue) => {
+        const nextValue = Math.max(
+          currentValue,
+          getReleasedCount(),
+          readStoredReleasedCount()
+        );
+
+        storeReleasedCount(nextValue);
+        return nextValue;
+      });
     }, 60_000);
 
     return () => window.clearInterval(syncInterval);
@@ -70,10 +120,12 @@ function useReleasedCounter() {
         }
 
         setValue((currentValue) => {
-          const baseline = getReleasedCount();
+          const baseline = Math.max(getReleasedCount(), readStoredReleasedCount());
           const nextValue = Math.max(currentValue, baseline) + 1;
+          const cappedValue = Math.min(advisoryText.counters.releasedCap, nextValue);
 
-          return Math.min(advisoryText.counters.releasedCap, nextValue);
+          storeReleasedCount(cappedValue);
+          return cappedValue;
         });
         tick();
       }, getRandomIncrementDelay());
